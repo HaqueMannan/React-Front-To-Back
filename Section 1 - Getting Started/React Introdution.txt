@@ -1,0 +1,53 @@
+----------------------------------------
+REACT INTRODUCTION
+----------------------------------------
+What is React?
+- Client Side JavaScript Library (i.e. runs on the clients machine in the browser).
+- Created & maintained by Facebook.
+- Used to build dynamic user interfaces.
+- Renders everything as a "component".
+- Often referred to as the "V" (View) in MVC.
+
+Library or Framework!
+- Is often called a framework and is comparable to other frameworks.
+- However, React is technically a Library (because it is missing a few key components that most frameworks include e.g. a router, HTTP etc.)
+- Tools can be added for routing and HTTP request etc. for example React Router, Fetch API, Axios and Redux.
+- Closer to Angular/Vue than something like jQuery.
+
+Why Should You Learn React?
+- Makes JavaScript easier
+- Organises your UI
+- Reusability
+- Scalability & Efficiency
+- Lighter than most other frameworks
+- GET A JOB!
+
+----------------------------------------
+ENVIRONMENT SETUP
+----------------------------------------
+- A Text Editor: Visual Studio Code or Atom.
+- Install NodeJS (comes with NPM - Node Package Manager) from https://nodejs.org/en/
+- We will use NPM to install Create React App which is the CLI for creating React Application Projects and we will also use NPM to install other smaller packages.
+- Install git for a version control system.
+- Install React Developer Tools and Redux DevTools for your browser (i.e. install from Chrome Web Store for Chrome Browser).
+
+- I will be using VSCode as my text editor. Some useful Extensions to have installed are:
+   > Bracket Pair Colorizer
+   > ES7 React/Redux/GraphQL/React-Native Snippet
+   > Live Server
+   > Prettier - Code Formatter
+
+- Go to the settings in VS Code and add custom user settings for Prettier:
+   "editor.formatOnSave": true
+   //"prettier.tabWidth": 3, (Optional)
+   // "prettier.singleQuote": true (Optional)
+- This will allow for Prettier to format your code on save. By default this is turned off and the tab spacing is on 2.
+
+- Go to the settings in VS Code and add custom user settings for Emmet:
+   "emmet.includeLanguages": {
+      "javascript": "javascriptreact"
+   },
+   "emmet.syntaxProfiles": {
+      "javascript": "jsx",
+      "javascript": "html"
+   }

@@ -1,0 +1,25 @@
+----------------------------------------
+REACT FRONT TO BACK
+----------------------------------------
+
+Learning Objectives:
+- What is React?
+- Tooling & Setup
+- ES6+ Syntax
+- React Components
+- Understanding JSX
+- State
+- Props & PropTypes
+- CSS Styling & React
+- Conditional Rendering
+- Class & Style Binding
+- Working with Forms
+- Events
+- Context API
+- Lifecycle Methods
+- Working with HTTP
+- React Router v4
+- Lists & Keys
+- Fragment
+- Redux
+- Firebase/Firestore (React-Redux-Firebase)
