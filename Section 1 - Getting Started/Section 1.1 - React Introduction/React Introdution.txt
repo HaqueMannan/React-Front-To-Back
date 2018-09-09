@@ -41,9 +41,9 @@ ENVIRONMENT SETUP
    "editor.formatOnSave": true
    //"prettier.tabWidth": 3, (Optional)
    // "prettier.singleQuote": true (Optional)
-- This will allow for Prettier to format your code on save. By default this is turned off and the tab spacing is on 2.
+- The settings above override the default settings (formatOnSave and singleQuote are turned off and tabWidth are set to 2 by default). You do not necessarily need to have prettier to have formatOnSave turned on but this would mean you need to press cmd+shift+p on your keyboard and enter >Format Document for prettier to format your document.
 
-- Go to the settings in VS Code and add custom user settings for Emmet:
+- Finally, go to the settings in VS Code and add custom user settings for Emmet:
    "emmet.includeLanguages": {
       "javascript": "javascriptreact"
    },
