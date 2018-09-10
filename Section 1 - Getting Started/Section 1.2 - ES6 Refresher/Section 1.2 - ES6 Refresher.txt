@@ -91,3 +91,59 @@ FILTER:
    ];
 
    const signal2 = signal.filter(status => status.id !== 2);
+
+
+SPREAD:
+- Allows us to spread values out, whether they are array elements or object properties.
+- The spread operator is represented by three dots ...
+
+   const arr = [1, 2, 3];
+   const arr2 = [...arr, 4];
+   console.log(arr2);
+
+- This will return [1, 2, 3, 4] in the JavaScript console. 
+- If we wrote const arr2 = [arr, 4] without using the ... spread operator, this will create an array within an array followed by the 4 (i.e. [Array(3), 4]).
+- We can also use the spread operator on object for example creating a new person object based on the original person object.
+
+   const person = {
+      name: 'Brad',
+      age: 36
+   };
+
+   const newPerson = {
+      ...person,
+      email: 'brad@gmail.com'
+   };
+
+- This is powerful in React because the State is immutable i.e. you cannot directly modify it, therefore, you need to make a copy of the State. The spread operator allows you to copy everything within the state and then add to it.
+- We can use a combination of the spread operator with the filter operator.
+
+
+DESTRUCTURING:
+- Destructuring allows you to pull values out of objects and arrays. Using the example below:
+
+   const profile = {
+      name: 'John Doe',
+      address: {
+         street: '40 Main st',
+         city: 'Boston'
+      },
+      hobbies: ['movies', 'music']
+   };
+
+   const { name } = profile;
+
+   console.log(name);
+
+- If we want to pull something out of profile, we would assign a variable with {} curly braces.
+- In the above syntax we are pulling out the name from the profile object. The console.log(name) will return 'John Doe' from the profile object.
+
+   const { name, address, hobbies } = profile;
+   console.log(name, address, hobbies[0])
+
+- We are deconstructing from the profiles and able to console log from the name, address and hobbies. Notice we are returning the first item within the hobbies using the index.
+
+   const { street, city } = profile.address;
+   console.log(street);
+
+- The above syntax is deconstructing the street and city from the profiles address object. We can now have access to the street and city properties.

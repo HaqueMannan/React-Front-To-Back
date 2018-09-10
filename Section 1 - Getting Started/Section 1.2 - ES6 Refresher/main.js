@@ -112,13 +112,51 @@ console.log(people3);
 // -----------------------------------
 // SPREAD
 // -----------------------------------
+const arr = [1, 2, 3];
+const arr2 = [...arr, 4];
+console.log(arr2);               //Returns [1,2,3,4]
 
+// Combination of spread and filter operators.
+const arr3 = [...arr.filter(num => num !== 2)];
+console.log(arr3);               //Returns [1,3]
+
+const personObj = {
+   name: 'Tony',
+   age: 40
+};
+console.log(personObj);          //Returns name:'Tony', age:'40'
+
+const newPersonObj = {
+   ...personObj,
+   email: 'tony@gmail.com'
+};
+console.log(newPersonObj);       //Returns name:'Brad', age:'36', email:'tony@gmail.com'
 
 
 // -----------------------------------
 // DESTRUCTURING
 // -----------------------------------
+//Profile Object
+const profile = {
+   fullName: 'John Doe',
+   address: {
+      street: '50 Burton Street',
+      city: 'UK'
+   },
+   hobbies: ['Movies', 'Music']
+};
 
+console.log(profile.fullName);         //Returns 'John Doe' from the profile object.
+
+// const { fullName } = profile;
+// console.log(fullName);                 //Also returns 'John Doe'
+
+const { fullName, address, hobbies } = profile;
+const { street, city } = profile.address;
+
+console.log(fullName, address, hobbies);              //Returns the name, address and all hobbies.
+console.log(fullName, address.street, hobbies[0]);    //Returns the name, street and first hobbies.
+console.log(street);                                  //Returns the street from address.
 
 
 // -----------------------------------
