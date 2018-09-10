@@ -1,0 +1,93 @@
+----------------------------------------
+SECTION 1.2 - ES6 REFRESHER
+----------------------------------------
+CONST & LET:
+- Used for declaring variables.
+- In ES5 we would have used var to declare variables. ES6 introduces const and let.
+- Const and Let created for block level scoping.
+- Const cannot be reassigned e.g. const name = "John"; we cannot then reassign name="Jack" as this will give a Uncaught TypeError in our JavaScript console.
+- You cannot init a const without a and value compared to let.
+- We are able to change the value of a const object and this is perfectly fine as we are manipulating an object that is already created. Example below:
+
+   const person {
+      name: 'Alan'
+   };
+
+   person.name = 'Anna'
+
+- Note we cannot recreate the person object above as this will give the Uncaught TypeError - for example:
+
+   people = {
+      name: 'Jack'
+   }
+
+- The same applies to an const array, we can manipulate the value within the array object.
+
+
+ARROW FUNCTIONS:
+- Arrow functions are a big part of React and will be used alot in your projects.
+- ES5 functions example:
+
+   function sayHello() {
+      console.log('Hello')
+   };
+
+- ES6 arrow function example of the above:
+
+   const sayHello = () => {
+      console.log('Hello');
+   };
+
+- If the function is only one line inside the function then we do not require the curly braces and can get rid of them and create the same arrow function as the above:
+
+   const sayHello = () => console.log('Hello');
+
+- You can add parameters within the bracket of your function, however, if there is only one parameter you do not need to have the parentheses for example:
+
+   const sayHellow = name => console.log(`Hello ${name}`);
+
+   const sayHellow = (name, age) => console.log('Hello ' + name + ' you are ' + age + ' years old')
+
+- ES6 allows for template literals. This allows you to concatenate easily:
+
+   ('Hello ' + name + ' you are ' + age + ' years old.') - Concatenation.
+   (`Hello ${name} you are ${age} years old.`) - Template Literals.
+
+
+FOR EACH:
+- For each allows us to loop through an array object and execute a block of code through each iteration. This is the easiest of loops.
+
+   const cars = ['Audi', 'BMW', 'Mercedes']
+   cars.forEach((car, index) => console.log(car))
+
+- The forEach loop takes in at least one parameter, this can be any variable you wish to use - we used car above but could easily have used x or anything else. We can also have the index as the second parameter. 
+- The above forEach loop console logs each car within the cars array. The forEach loop does nothing on its own, it is the console.log() block code that performs the action through each iteration.
+
+
+MAP:
+- Maps works in a similar way to the forEach loop, but it returns an array. You can change each item in the array in any way you want using the Map loop.
+- The Map loop function takes in at least one parameter similar to the forEach loop.
+
+   const fruits = ['Apples', 'Oranges', 'Pears']
+
+   const singleFruit = fruits.map(function(fruit) {
+      return fruit.slice(0, -1).toUpperCase();
+   });
+
+- We can write this single line function using ES6 arrow function:
+
+   const singleFruit = fruits.map(fruit => fruit.slice(0, -1).toUpperCase());
+
+
+FILTER:
+- Similar to the forEach and Map loops. Filter is a high order array method and is used to return an array with things filtered out.
+- Often used in state managers such as Redux/Context API where you want to delete something from the state i.e. filter it out.
+- Filter is used a lot is because in React your state is immutable, you cannot directly change the state, in which case you will return a new array i.e. making a copy of the original array and filtering out the array object that is not needed without effecting the original state array.
+
+   const signal = [
+      { id: 1, signal: 'OK' },
+      { id: 2, signal: 'Warning' },
+      { id: 3, signal: 'Danger' }
+   ];
+
+   const signal2 = signal.filter(status => status.id !== 2);
