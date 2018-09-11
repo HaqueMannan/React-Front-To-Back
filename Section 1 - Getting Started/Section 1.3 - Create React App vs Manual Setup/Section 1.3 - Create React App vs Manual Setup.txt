@@ -1,0 +1,25 @@
+----------------------------------------
+SECTION 1.3 - CREATE REACT APP VS MANUAL SETUP
+----------------------------------------
+- There are many ways to create a React app. 
+
+- The most popular and easiest method is to use the create-react-app:
+   https://github.com/facebook/create-react-app
+
+- This is a CLI (command line interface) where you can install it using npm/yarn (package manager) and then run a simple command:
+
+   npx create-react-app my-app
+
+- This will create the entire boilerplate application for you to start with. This is the most easiest and practical way to create a React app and is recommended in most cases.
+
+- Behind the scenes, create-react-app uses Babel and Webpack.
+- Webpack is a JavaScript bundler and takes in JavaScript and other file types such as SASS, images etc. and bundles it into something the browser can read. 
+- Babel compiles your JavaScript to a browser compatible code which is ES5 in most cases. ES6 Modules are not compatible with browsers and so Babel converts this into ES5 code.
+
+- You can create a React app without the create-react-app manually, however, there are a lot of configuration that would need to go into it. 
+- For beginners it is not advisable to manually create your own React App as this would confuse you.
+- In most cases you would want to use the create-react-app unless you really need something customisable and you cannot use the create-react-app.
+
+- There are other bundlers aside from webpack such as parcel:
+   https://parceljs.org/
+- Parcel is meant to be very easy to setup because it suppose to be zero configuration unlike webpack. You can also use it with Babel and other plugins.
