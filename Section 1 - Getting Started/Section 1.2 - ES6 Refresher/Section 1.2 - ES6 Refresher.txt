@@ -147,3 +147,102 @@ DESTRUCTURING:
    console.log(street);
 
 - The above syntax is deconstructing the street and city from the profiles address object. We can now have access to the street and city properties.
+
+
+CLASSES:
+- Inside of a class you can have properties and methods.
+- A property is an attribute or property of that class or an object that has been created from that class.
+- Methods are functions inside of a class.
+- To create properties you require a constructor which is a special type of method which runs automatically when you instantiate an object from a class.
+
+Example of a Class:
+
+   class helloWorldClass{
+      constructor(){
+         console.log('Hello World');
+      } 
+   }
+
+- To instantiate a new object from the above class we would write the following syntax (note this constructor will automatically run and print 'Hello World' in the console):
+
+   const consoleMessage = new helloWorldClass();
+
+- In React we will be creating classes but will not need to instantiate the class because it is done behind the scenes but it is important how classes work in basic JavaScript.
+
+- To create properties within a class we would pass in properties within the constructor() and then assign these properties to a property attribute.
+- The 'this' keyword pertains to the current object.
+
+   class Person{
+      constructor(name, age){
+         this.name = name;
+         this.age = age;
+      }
+   }
+
+   const person1 = new Person('John Doe', 28);
+   console.log(person1.name)
+
+- The console.log() will return 'John Doe' in the console.
+- To create a method within our class we simply create a function within our class for example:
+
+   class Person{
+      constructor(name, age){
+         this.name = name;
+         this.age = age;
+      }
+
+      greet(){
+         return `Hello my name is ${this.name} and I am ${this.age} years old.`;
+      }
+   }
+
+- To call on a class method we would use the class object followed by the method/function name:
+
+   const person1 = new Person('Sarah', 18);
+   console.log(person1.greet());
+
+
+SUBCLASSES:
+- Subclasses allows us to extend from another class. 
+- In this example we will create a subclass of Customer which will extend from the person class above.
+- To extend the class we will use the keyword extends followed by the class name we are extending from.
+- To inherit the properties from the extended class we need to use the keyword super() and pass in the properties from the parent class.
+
+   class Customer extends Person{
+      constructor(name, age, balance){
+         super(name, age);
+         this.balance = balance;
+      }
+   }
+   const customer1 = new Customer('Kevin', 34, 230);
+   console.log(customer1.name);
+
+
+MODULES:
+- Modules are a big part of any framework because your are not putting everything in one JavaScript file.
+- You want to create multiple component files and then import that components into your main app file.
+- We require Webpack/Babel which are module bundlers. The browser does not support modules but we can utilise Modules with Webpack/Babel.
+
+Example of Modules:
+
+-------------------
+File 1 (file1.js)
+-------------------
+export const name = 'Jeff';
+export const nums = [23, 2, 15]
+export default Person;
+
+-------------------
+
+- We can export anything from File 1 and import it into our File 2. This includes anything from variables, functions, methods, arrays, classes, objects etc.
+
+-------------------
+File 2 (file2.js)
+-------------------
+import {name, nums} from './file1'
+import Person from './file1';
+
+-------------------
+
+- The ./ assumes the file is within the same directory whereas ../ will indicate a file up.
+- If we use the keyword default when exporting a module then we do not require the {} curly braces on import of the module.

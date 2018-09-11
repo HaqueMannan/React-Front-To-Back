@@ -162,14 +162,72 @@ console.log(street);                                  //Returns the street from 
 // -----------------------------------
 // CLASSES
 // -----------------------------------
+//CLass Example:
+class helloWorldClass{
+   constructor(){
+      console.log('Hello World')
+   }
+}
 
+//Instantiating a new object from the helloWorldClass class. The constructor above will automatically run the property method and console log 'Hello World' in the JavaScript console.
+const helloWorld = new helloWorldClass();
+
+// Person Class Example:
+class Person {
+   constructor(name, age) {
+      this.name = name;
+      this.age = age;
+   }
+
+   greet() {
+      return `Hello, my name is ${this.name} and I am ${this.age}`;
+   }
+}
+
+//New Person Object using the Person Class:
+const person1 = new Person('John Doe', 28);
+console.log(person1);                              //Returns the person1 object {name: 'John Doe', age: 28}
+console.log(person1.name);                         //Returns 'John Doe' from the person1 object.
+console.log(person1.greet());                      //Returns the greet() method.
 
 
 // -----------------------------------
 // SUBCLASSES
 // -----------------------------------
+//The Customer Class extends from the Person Class above.
+//We use super() to get the properties from the parent class.
+class Customer extends Person {
+   constructor(name, age, balance) {
+      super(name, age);
+      this.balance = balance;
+   }
+
+   info() {
+      return `${this.name} owes £${this.balance}.00`;
+   }
+}
+
+const customer1 = new Customer('Kevin', 32, 300);
+console.log(customer1);                //Returns the customer1 object {name:'Kevin', age:32, Balance: £300}
+console.log(customer1.info());         //Return 'Kevin owes £300.00' in the console.
 
 
 // -----------------------------------
 // MODULES
 // -----------------------------------
+//Example of Modules - This will not work within the browser as we need Webpack/Babel to help with JavaScript Modules which are not setup.
+
+//FILE 1 MODULE (file1.js) EXPORTS:
+// export const name = 'Jeff';
+// export const nums = [1, 2, 3];
+// export default Person;
+
+// class Person {
+//    constructor(name, age) {
+//       this.name = name;
+//    }
+// }
+
+// FILE 2 (file2.js) IMPORTS MODULES FROM FILE 1:
+// import { name, nums } from './file1';
+// import Person from './file1';
