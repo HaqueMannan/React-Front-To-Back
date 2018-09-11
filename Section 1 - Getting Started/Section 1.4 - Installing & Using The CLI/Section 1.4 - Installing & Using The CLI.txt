@@ -1,0 +1,51 @@
+----------------------------------------
+SECTION 1.4 - INSTALLING & USING THE CLI
+----------------------------------------
+- We will learn how to: 
+   >run the create-react-app CLI tool
+   >generate our application
+   >run the dev server
+
+How to run create-react-app CLI tool:
+1) Open up your teminal/command line.
+2) run the following code to see if you have npm installed:
+
+   > npm --version
+
+This should log the version should npm be installed on your machine. If not install nodejs/npm following the web link and installation guide:
+   https://www.npmjs.com/get-npm
+   https://nodejs.org/en/
+
+3) run the following code to install create-react-app globally:
+
+   > sudo npm install -g create-react-app
+   > password: enter your PC User password to install.
+
+4) To generate a new React application run the following code (ensure you are within the directory you wish to create the new React App e.g. cd to your desktop etc.):
+
+   > create-react-app NameOfApplication
+
+NameOfApplication should be the name of your application. This will create the application in the destination directory. 
+
+5) In your command line cd to your project file and open the file in VS code:
+
+   > cd NameOfApplication
+   > code .
+
+If the code . command does not open VS Code, manually open the application. In VS Code you can go into your command palette by pressing cmd+shift+p and type in shell. Select the Shell Command: Install 'code' command in PATH which will give you access to the code command.
+
+6) To run the dev server enter in your terminal:
+
+   > npm start
+
+This will open your application in the browser automatically in http://localhost:3000/ with a simple React Welcome page.
+
+7) In your terminal press ctrl+c to stop the dev server.
+
+   > ctrl + c
+
+8) When your ready to deploy your application and create your static assets you will run the following code:
+
+   > npm run build
+
+This will create a build folder within your project containing all your static assets/files you want to deploy to your web server.
