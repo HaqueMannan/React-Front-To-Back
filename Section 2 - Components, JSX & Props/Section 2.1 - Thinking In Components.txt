@@ -1,0 +1,29 @@
+----------------------------------------
+THINKING IN COMPONENTS
+----------------------------------------
+- It is important to start thinking in components. 
+- React is component based where your output is part of a component and you also have your functionality/JavaScript in that component.
+- Components can also hold a State and properties.
+- If you look at a Twitter page we can look at the various component:
+   Navbar component
+   Header component
+   Statistics component (tweeta, following, followers etc stats.)
+   Bio component.
+   Twitter feed component.
+   Each post within the twitter feed can be seen as a post component.
+- You want to think of UI as components in React.
+- Think of State as data attached to that component.
+
+- The bio component within Twitter has a Name, slug, descripion, location etc. which will be part of the Bio components state.
+- If you went to another Twitter profile, the State will be different i.e. the data will be different for a different user.
+
+- There are two types of components:
+   1) Smart Components
+   2) Dumb Components
+
+- A smart component has a state which will change with different data.
+- A dumb component will be the same on every page for example the Twitter Signup component is considered to be a dumb component as it has the same text and signup button and will appear the same in every page that uses that component.
+
+- Dumb components you can use a single function (a stateless functional components).
+- Any components that has state needs to be a class.
+- In a lot of cases you will need to share state between different components. This is where the context API/Redux/another state manger comes in; they allow you to have application level state. You can have your state at application level and then have any of your components to access that state and pull the information down to the component.
