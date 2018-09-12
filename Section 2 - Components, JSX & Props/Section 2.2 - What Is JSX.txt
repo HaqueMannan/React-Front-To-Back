@@ -1,0 +1,70 @@
+----------------------------------------
+WHAT IS JSX
+----------------------------------------
+- JSX is a JavaScript extension that allows us to basically put html inside of our JavaScript.
+- JSX is syntactical sugar for our html code.
+
+- There are a couple of rules behind JSX that we must follow:
+
+   1) We cannot use the html 'class' attribute, instead we must use className:
+
+      HTML:
+      <div class="App"></div>
+
+      JSX:
+      <div className="App"></div>
+
+   2) We cannot use the for attribute:
+
+      HTML:
+      <label for="name">Name</label>
+
+      JSX:
+      <label htmlFor="name">Name</label>
+
+   3) If you want to use a html element that does not have an ending tag you must keep the forward slash />:
+
+      HTML5 (no longer require /> at the end):
+      <input type='text'>
+      <br>
+
+      JSX:
+      <input type='text'/>
+      <br />
+
+   4) When you return(); you need to return a single parent element:
+
+      JSX:
+      return (
+         <div className='App'>
+            <h1>Can contain as many html elements or jsx inside the parent element.</h1>
+         </div>
+      );
+
+      JSX Syntax error where there is more than one parent element returned:
+      return (
+         <div className='App'>
+            <h1>Can contain as many html elements or jsx inside the parent element.</h1>
+         </div>
+         <div>
+            <h1>Hello World</h1>
+         </div>
+      );
+
+- As mentioned above, JSX is a syntactical sugar for JavaScript html. Below is an example of JavaScript html syntax for the JSX html syntax:
+
+   JSX:
+   return (
+      <div className='App'>
+         <h1>The App Component</h1>
+      </div>
+   );
+
+   JavaScript Equivalent of the Above JSX:
+   return React.createElement(
+      'div', 
+      {className: 'App'},
+      React.createElement('h1', null, 'The App Component')
+   );
+
+   Both will create a parent div element with a h1 child element with the text of The App Component.
