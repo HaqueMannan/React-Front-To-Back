@@ -1,0 +1,65 @@
+----------------------------------------
+JSX Expressions
+----------------------------------------
+- In the render() above the return() we can put any type of JavaScript we want.
+- In the return() we can output the JavaScript. The JavaScript expression will go in {} curly braces.
+- Below is an example of creating a variable and outputting the variable within a <h4> element as well as performing basic JavaScript arithmetic's and performing other expressions.
+
+   class App extends Component {
+      render() {
+         //Any JavaScript we want is placed here for example"
+         const name = 'Greta'
+         const showHello = true;
+
+         return (
+            <div className="App">
+               <h1>The App Component</h1>
+               <h4>Hello {name.toUpperCase()}</h4>
+               <h4>1 + 1 = {1 + 1}</h4>
+            </div>
+         );
+      }
+   }
+
+- We can use ternary expressions to perform a nif statement as shown below. The below if statement is checking to see if the showHello is true and if yes then it will display the <h4> element else it will display null.
+
+   class App extends Component {
+      render() {
+         const name = 'Greta'
+         const showHello = true;
+
+         return (
+            <div className="App">
+               <h1>The App Component</h1>
+               {showHello ? <h4>Hello {name.toUpperCase()}</h4> : null}
+            </div>
+         );
+      }
+   }
+
+[Important Note: In React most of your dynamic variables will come from State or Props.]
+
+- Another way e could perform conditionals is that we can put pieces of JSX within variables. 
+
+   class App extends Component {
+      render() {
+         const showMath = true;
+         const num1 = 10
+         const num2 = 5
+
+         //init variables math
+         let math;
+         if(showMath){
+            math = <h4>{num1} + {num2} = {num1 + num2}</h4>
+         } else{
+            math = null;
+         }
+
+         return (
+            <div className="App">
+               <h1>The App Component</h1>
+               {math}
+            </div>
+         );
+      }
+   }
