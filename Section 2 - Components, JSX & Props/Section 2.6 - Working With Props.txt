@@ -1,0 +1,95 @@
+----------------------------------------
+WORKING WITH PROPS
+----------------------------------------
+- In some cases you may wish to pass in data into a component, these are known as props.
+- Props is short for properties.
+- Just like you have HTML attributes, we can pass in something/data to our components:
+
+App.js file:
+   <Header branding="Contact Manager" />
+
+- The way that we access the props in a functional component differs to that of a class component.
+
+
+----------------------------------------
+Class Component Props (Contact.js file):
+----------------------------------------
+- To pass in props within our Contact Component we use the this.props. followed by the attribute/properties name, all contained within {} curly braces:
+
+   class Contact extends Component {
+      render() {
+         return (
+            <div>
+               <h4>{this.props.name}</h4>
+               <ul>
+                  <li>{this.props.email}</li>
+                  <li>{this.props.phone}</li>
+               </ul>
+            </div>
+         )
+      }
+   }
+
+- We can then use the props/attribute name (i.e. name, email, phone) as our class component attribute within our App.js file:
+- We can now use the same Contact class component but pass in different data for our props attributes.
+
+   <Contact name="John Doe" email="jdoe@gmail.com" phone="1111-2222222"/>
+   <Contact name="Emily Parker" email="eparker@gmail.com" phone="1111-3333333"/>
+
+
+----------------------------------------
+Functional Component Props (Header.js file):
+----------------------------------------
+- To get the props from our functional component we need to pass props in as a parameter.
+- We can then place this within our return() using the {} curly braces containing props and the attribute name.
+
+   const Header = (props) =>{
+      return(
+         <div>
+            <h1>{props.branding}<h1>
+         </div>
+      );
+   };
+
+- We can then use the props name attribute (i.e. branding) as our functional component attribute within our App.js file:
+
+   <Header branding="Contact Manager" />
+
+- In our React web tool, when we click on our Header component we can see the Props read-only of the attribute branding: "Contact Manager".
+
+
+----------------------------------------
+Destructuring:
+----------------------------------------
+- We can use destructuring to write cleaner code by writing before the return() a const array variable that is set to props or this.props (depending on whether the component is a class/function).
+
+Destructuring of a Class Component:
+
+   class Contact extends Component {
+      render() {
+         const { name, email, phone } = this.props;
+
+         return (
+            <div>
+               <h4>{name}</h4>
+               <ul>
+                  <li>{email}</li>
+                  <li>{phone}</li>
+               </ul>
+            </div>
+         )
+      }
+   }
+
+
+Destructuring of a Functional Component:
+
+   const Header = (props) => {
+      const { branding } = props;
+
+      return (
+         <div>
+            <h1>{branding}</h1>
+         </div>
+      );
+   };
