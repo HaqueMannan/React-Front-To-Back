@@ -1,0 +1,54 @@
+----------------------------------------
+CSS IN REACT
+----------------------------------------
+- We can do inline styling in our JSX:
+- The style property and value are held within {{}} double curly braces:
+
+Header.js File:
+   const Header = (props) => {
+      const { branding } = props;
+
+      return (
+         <div>
+            <h1 style={{ color: 'red' }}>{branding}</h1>
+         </div>
+      );
+   };
+
+- You cannot use the default CSS within JSX and so must use camel case:
+   style={{ color: 'red', fontSize: '50px' }}
+
+   CSS                 JSX
+   font-size     =     fontSize 
+
+- We can put our style within a variable and call on the variable within our inline style:
+
+Header.js File:
+   const Header = (props) => {
+      const { branding } = props;
+
+      return (
+         <div>
+            <h1 style={headingStyle}>{branding}</h1>
+         </div>
+      );
+   };
+
+   const headingStyle{
+      color: 'red',
+      fontSize: '50px'
+   }
+
+- You can also create an individual CSS files for each of your component within the same folder as the components. You would then be able to use regular CSS within your CSS file. We would simply import the CSS file into our components file.
+- The CSS styling will not have any effect elsewhere other than the component which has imported the CSS file. This is good for encapsulation.
+
+src/component/contact.css file:
+   h4 {
+      color: blue;
+      text-transform: uppercase;
+   }
+
+src/component/Contact.js file:
+   import React from "react";
+   import propTypes from 'prop-types';
+   import './contact.css';
