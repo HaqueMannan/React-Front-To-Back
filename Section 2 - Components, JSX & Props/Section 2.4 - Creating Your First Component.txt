@@ -1,0 +1,79 @@
+----------------------------------------
+CREATING YOUR FIRST COMPONENT
+----------------------------------------
+- In the src folder of your app, you would want to create a new folder called components.
+- Within the new components folder we will create a new .js file for example Contacts.js
+- You should name your component files (.js) with a capital letter for example:
+   App.js
+   Contacts.js
+
+- Note: in VS code we installed an extension called ES7 React/Redux/GraphQL/React-Native snippets which allows us to create React components using keys e.g. rcc (similar to Emmet but for React).
+- To create a component type in rcc and tab to create a component template:
+
+   import React, { Component } from 'react'
+
+   export default class Contact extends Component {
+      render() {
+         return (
+            <div>
+               
+            </div>
+         )
+      }
+   }
+
+- Note we can remove the 'export default' from the class and place it at the bottom followed by the class name. We can create our component within the <div> element.
+
+   class Contact extends Component {
+      render() {
+         return (
+            <div>
+               <h4>John Doe</h4>
+               <ul>
+                  <li>Email: jdoe@gmail.com</li>
+                  <li>Phone: 1111-2222222</li>
+               </ul>
+            </div>
+         )
+      }
+   }
+
+   export default Contact;
+
+- In order to display this component within our application we need to bring it into our main application component (App.js), which is the meeting place for all of our components.
+- Within our App.js file we would add the following syntax - note: because we exported default, we do not need the {Component} in our syntax below:
+
+   'import Contact from ./component/Contact';
+
+- We can now use the contact component within our App.js file using the <Contact /> tag which will now render the Contact component within our application view.
+
+   class App extends Component {
+      render() {
+         return (
+            <div className="App">
+               <h1>The App Component</h1>
+               <Contact />
+            </div>
+         );
+      }
+   }
+
+- You can put as many components as you want within the App.js App component class and this will render it within your application.
+- Using the React web tool we can see the App component and drilling into this component we should be able to see the Contact component:
+
+   <App> == $r
+      <div className="App">
+         <h1>The App Component</h1>
+         <Contact> == $r
+            <div>
+               <h4>John Doe</h4>
+               <ul>
+                  <li>Email: jdoe@gmail.com</li>
+                  <li>Phone: 1111-2222222</li>
+               </ul>
+            </div>
+         </Contact>
+      </div>
+   </App>
+
+- You have officially created your first React Class Component.

@@ -1,5 +1,5 @@
 ----------------------------------------
-JSX Expressions
+JSX EXPRESSIONS
 ----------------------------------------
 - In the render() above the return() we can put any type of JavaScript we want.
 - In the return() we can output the JavaScript. The JavaScript expression will go in {} curly braces.
@@ -21,7 +21,7 @@ JSX Expressions
       }
    }
 
-- We can use ternary expressions to perform a nif statement as shown below. The below if statement is checking to see if the showHello is true and if yes then it will display the <h4> element else it will display null.
+- We can use ternary expressions to perform an if statement as shown below. The below if statement is checking to see if the showHello is true and if yes then it will display the <h4> element else it will display null.
 
    class App extends Component {
       render() {
@@ -39,7 +39,7 @@ JSX Expressions
 
 [Important Note: In React most of your dynamic variables will come from State or Props.]
 
-- Another way e could perform conditionals is that we can put pieces of JSX within variables. 
+- Another way we could perform conditionals is that we can put pieces of JSX within variables. 
 
    class App extends Component {
       render() {
