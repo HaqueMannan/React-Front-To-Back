@@ -1,0 +1,40 @@
+----------------------------------------
+FUNCTIONAL COMPONENTS
+----------------------------------------
+- A Functional Component is a React component that is made from a JavaScript function (c.f. to React Class component which is made from a JavaScript class).
+- A Functional Component cannot have any state within the component.
+- Using the VS Code extension (ES7 React/Redux/GraphQL/React-Native snippets) we can write rfc and tab to create our React Function Component template:
+
+   import React from "react";
+
+   export default () => {
+      return (
+         <div>
+            
+         </div>
+      );
+   };
+
+Note you could use the ES5 function rather than the ES6 arrow functions - but the snippet will use ES6 arrow functions. Below is an example of a Header Function Component written in ES5 and ES6:
+
+ES5 Function:
+   function Header (){
+      return(
+         <div>
+            <h1>Header Content</h1>
+         </div>
+      );
+   };
+
+   export default Header;
+
+ES6 Function
+   const Header = () => {
+      return (
+         <div>
+            <h1>Header Content</h1>
+         </div>
+      );
+   };
+
+   export default Header;
