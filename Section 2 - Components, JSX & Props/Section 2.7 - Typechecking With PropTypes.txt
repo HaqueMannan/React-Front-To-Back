@@ -1,0 +1,90 @@
+----------------------------------------
+TYPECHECKING WITH PROPSTYPES
+----------------------------------------
+- DefaultProps and PropTypes allow us to have type checking on our properties.
+- DefaultProps allows us to have a data pass in even if no attribute value is passed into our props. For example in our Header.js component, we may wish to have a default prop for the branding attribute so that a heading is shown on our page even if no properties are passed into the branding attribute:
+
+Header.js Component:
+   const Header = (props) => {
+      const { branding } = props;
+
+      return (
+         <div>
+            <h1>{branding}</h1>
+         </div>
+      );
+   };
+
+   Header.defaultProps = {
+      branding: 'My App'
+   }
+
+App.js Component:
+   class App extends Component {
+      render() {
+         return (
+            <div className="App">
+               <Header />
+            </div>
+         );
+      }
+   }
+
+   Important Note: By default the Header component will display "My App" unless we pass in value for the branding attribute which will override the default.
+
+- PropTypes validates the data that is coming in i.e. string, number etc.
+- To add PropTypes we would import PropTypes from 'prop-types' into our component .js file.
+- We can use impt and tab to snippet this syntax within our .js file. 
+- Similar to the defaultProps{} we would apply the same for PropTypes{} outside/below the return() within our component file:
+
+
+Header.js Component:
+   import React from "react";
+   import propTypes from 'prop-types';
+
+   const Header = (props) => {
+      const { branding } = props;
+
+      return (
+         <div>
+            <h1>{branding}</h1>
+         </div>
+      );
+   };
+
+   Header.propTypes = {
+      branding: propTypes.string.isRequired
+   }
+
+
+- Alternatively we can add your propTypes within your class (see below) or outside your class (as seen above). The same can be applied for defaultProps. It is entirely up to you whether to add these within the class or outside the class.
+- If we decide to use it within out class we would need to use static propType or static defaultProps: 
+
+   class Contact extends Component {
+      static propTypes = {
+         name: propTypes.string.isRequired,
+         email: propTypes.string.isRequired,
+         phone: propTypes.number.isRequired
+      }
+
+      static defaultProps = {
+         name: "John Doe",
+         email: "j.doe@gmail.com",
+         phone: "1111-2222222"
+      }
+
+      render() {
+         const { name, email, phone } = this.props;
+         return(
+            ...
+         )
+      }
+   }
+
+- If we have a wrong PropTypes for our component attribute/props value then the extent of this error will only show up as warning in our JavaScript console; however, your application continue to display/run.
+
+- The PropTypes available to us are:
+   .string
+   .number
+   .object
+   .bool
