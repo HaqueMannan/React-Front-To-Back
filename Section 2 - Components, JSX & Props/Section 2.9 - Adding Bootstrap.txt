@@ -1,0 +1,38 @@
+----------------------------------------
+ADDING BOOTSTRAP
+----------------------------------------
+- To install bootstrap into your React App project, open your project folder in terminal and type in the following command:
+
+   npm install bootstrap
+
+- This will install the bootstrap within your node_modules folder and update your package.json file to include bootstrap as a dependency.
+
+- In your main App.js file we need to import bootstrap into our application file. This will allow us to use Bootstrap as a global CSS for our application.
+
+   import "bootstrap/dist/css/bootstrap.min.css";
+
+- We can now start using the Bootstrap css classes to style our application. Example component using bootstrap 4 CSS classes:
+
+Header.js File:
+
+   import React from "react";
+
+   const Header = (props) => {
+      const { branding } = props;
+      return (
+         <nav className="navbar navbar-expand-sm navbar-dark bg-danger mb-3 py-0">
+            <div className="container">
+               <a href="/" className="navbar-brand">{ branding }</a>
+               <div>
+                  <ul className="navbar-nav mr-auto">
+                     <li className="nav-item">
+                        <a href="/" className="nav-link">Home</a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </nav>
+      );
+   };
+
+   export default Header;
