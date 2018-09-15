@@ -1,0 +1,128 @@
+----------------------------------------
+EVENTS IN REACT
+----------------------------------------
+- We are going to add an Event within our React App which will show/hide contact details when a user clicks the dropdown icon.
+- To add fontawesome icons (https://fontawesome.com/how-to-use/on-the-web/setup/getting-started?using=web-fonts-with-css) within our project, we will add the cdn link within our index.html file located within the public folder.
+
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+- We would want to go to the Contact.js component file (our UI component for the Contacts) to add the icon next to our <h4> element:
+
+   return (
+      <div className="card card-body mb-3">
+         <h4>{name} <i className="fas fa-sort-down"><i/></h4>
+         <ul className="list-group">
+            <li className="list-group-item">{email}</li>
+            <li className="list-group-item">{phone}</li>
+         </ul>
+      </div>
+   );
+
+- To add an event on our element, it is similar to an inline event within JavaScript but it doesn't work the same way i.e. instead of writing onclick all lowercase we need to write it in camelcase of onClick. 
+- We can add whatever we want within the {} (as an inline function)) as seen below:
+
+   <h4>{name} <i onClick={() => console.log('Hello')} className="fas fa-sort-down"><i/></h4>
+
+- We will want to create a function within this class that will show/hide the contact details and so must use the this. keyword followed by the name of the function. The JavaScript function should be written above the render().
+- We would want to add some sort of State which records the boolean value of show contact info to the contact component. When we click the button we want to change that State.
+
+- Whenever we create our own method we need to do some extra work to make the keyword (this) work within our custom method. The reason for this is because we are creating a custom method and not a life cycle method that is included within the Component class. For example core methods such as the render() method are within the Component class and we can use the this keyword.
+- To make the 'this' keyword work with our custom methods, there are a couple of things we can do:
+
+1) We can bind it using the .bind(this) on the function as seen below:
+
+   class Contact extends Component {
+      state = {};
+
+      onShowClick(){
+         console.log(this.state);
+      }
+
+      render() {
+         const { name, email, phone } = this.props.contact;
+
+         return (
+            <div className="card card-body mb-3">
+               <h4>{name} <i onClick={this.onShowClick.bind(this)} className="fas fa-sort-down"></i></h4>
+               <ul className="list-group">
+                  <li className="list-group-item">{email}</li>
+                  <li className="list-group-item">{phone}</li>
+               </ul>
+            </div>
+         );
+      }
+   }
+
+2) We can have a constructor and add the bind(this) on the function as seen below:
+
+   class Contact extends Component {
+      constructor(){
+         super();
+         this.state = {};
+
+         this.onShowClick = this.onShowClick.bind(this);
+      }
+
+      onShowClick(){
+         console.log(this.state);
+      }
+
+      render() {
+         const { name, email, phone } = this.props.contact;
+
+         return (
+            <div className="card card-body mb-3">
+               <h4>{name} <i onClick={this.onShowClick} className="fas fa-sort-down"></i></h4>
+               <ul className="list-group">
+                  <li className="list-group-item">{email}</li>
+                  <li className="list-group-item">{phone}</li>
+               </ul>
+            </div>
+         );
+      }
+   }
+
+3) The easiest method without the need for binding is to turn the function into an arrow function as seen below:
+
+   class Contact extends Component {
+      state = {};
+
+      onShowClick = () => {
+         console.log(this.state);
+      }
+
+      render() {
+         const { name, email, phone } = this.props.contact;
+
+         return (
+            <div className="card card-body mb-3">
+               <h4>{name} <i onClick={this.onShowClick} className="fas fa-sort-down"></i></h4>
+               <ul className="list-group">
+                  <li className="list-group-item">{email}</li>
+                  <li className="list-group-item">{phone}</li>
+               </ul>
+            </div>
+         );
+      }
+   }
+
+- Every event can pass in an e event object and we can access different things from the object.
+
+   onShowClick = (e) => {
+      console.log(e.target);
+   }
+
+- We can pass in a parameter for example if we have a event and we want the function to pass something in (usually an id) we would use .bind and pass in this as the first parameter and then whatever you want after that:
+
+   onShowClick = (id, e) => {
+      console.log(id);
+   }
+
+   <i onClick={this.onShowClick.bind(this, 1)} className="fas fa-sort-down"></i>  
+
+- We can make this dynamic for example passing in the name:
+   onShowClick = (name, e) => {
+      console.log(name);
+   }
+
+   <i onClick={this.onShowClick.bind(this, name)} className="fas fa-sort-down"></i>
