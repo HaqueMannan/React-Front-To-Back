@@ -1,0 +1,40 @@
+----------------------------------------
+CHANGING STATE
+----------------------------------------
+- Continuing on from Section 3.2 - Events in React we want to be able to change the State of a component using a click event.
+- In our Contact.js file we want to add a State object which has the property of showContactInfo and set this to a boolean value of true. This State will control whether the email and phone detail of the contact person should be visible.
+- On our onShowClick function we want to update the State. Important Note: State is immutable and cannot be directly manipulate it, if you do this will give a warning message of Do not mutate state directly. Use setState()... within your JavaScript console.
+- We need to use setState({}) and pass in the object we want to change in the state and the property value we want to change it to.
+
+   class Contact extends Component {
+      state = {
+         showContactInfo: true
+      };
+
+      onShowClick = (e) => {
+         setState({showContactInfo: false});
+      }
+
+- The above will change the state to false when the dropdown icon is clicked, however, we would want to toggle between true and false. To do this we would use the property is not this state showContactInfo:
+
+   onShowClick = (e) => {
+      setState({showContactInfo: !this.state.showContactInfo});
+   }
+
+- Note: this functionality of the function is so simple you do not actually require a separate function and we can write the functionality directly inline of the onClick event.
+
+   <i onClick={() => this.setState({showContactInfo: !this.state.showContactInfo}} className="fas fa-sort-down">
+
+- We now want to start toggling the UI based on the state. In the render() we are going to use destructuring to pull the showContactInfo from the state. We are then going to use a ternary function to check whether the showContactInfo is true or false in order to show/hide the <ul> element.
+
+   render() {
+      const { name, email, phone } = this.props.contact;
+      const { showContactInfo } = this.state;
+   return(){...
+      {showContactInfo ? (
+         <ul className="list-group">
+            <li className="list-group-item">{email}</li>
+            <li className="list-group-item">{phone}</li>
+         </ul>
+      ) : null}
+   }
