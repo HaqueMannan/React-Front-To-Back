@@ -1,0 +1,265 @@
+----------------------------------------
+CREATING STATE
+----------------------------------------
+- A State is an object that determines how a component renders and behaves.
+- State allows you to create components that are dynamic and interactive.
+
+- Analogy of water and ice: 
+   > The difference between water and ice is temperature. 
+   > Temperature is the measurement of thermal energy.
+   > Key word is measurement - implies can be tracked with a known value (absolute zero and absolute hot).
+   > By changing the temperature we have the ability to put a piece of matter into a different state: liquid, solid or gas.
+- What if we could define a set of properties that would determine how our program would behave in any situation, similarly to water’s relationship with temperature?
+
+- Taking the example of our Contacts component:
+   1) We want a Contacts (plural) component.
+   2) Inside that component we want a state that holds all the different contact people i.e. an object of contacts within their name, email and phone number.
+   3) We want the Contacts component to loop through each contact within the State and then output a specific Contacts component for each contact within the State Object.
+
+src/components/Contacts.js File:
+- Contacts.js has to be a class based component because it requires State.
+- rcc and tab using ES7 snippet extension in VS Code.
+- There are two ways to add state:
+
+1) Use a Constructor (constructors run when the object is mounted/initialised):
+
+   class Contacts extends Component {
+      constructor() {
+         super();
+         this.state = {
+            contact: [
+               {
+                  id: 1,
+                  name: 'John Doe',
+                  email: 'jdoe@gmail.com',
+                  phone: '1111-2222222'
+               },
+               {
+                  id: 2,
+                  name: 'Emily Parker',
+                  email: 'eparker@gmail.com',
+                  phone: '1111-3333333'
+               },
+               {
+                  id: 3,
+                  name: 'Katie Davis',
+                  email: 'kdavis@gmail.com',
+                  phone: '1111-4444444'
+               }
+            ]
+         }
+      }
+
+- We have a State object of our different contacts, but we would want to render the output the contact component for each contact. We would want to loop through each object and pass in their properties into the component to render the contact component for each contact held within our State object.
+- Above the return() we did a destructing to pull out contacts from the state which will make our code cleaner to read.
+- In React we use map to loop through our contact objects (refer to our ES6 refresher in Section 1.2 ES6 Refresher). The below will map the contact.name to the <h1> element which will render the names only in the browser:
+
+   render() {
+      const { contacts } = this.state;
+      return (
+         <div>
+            { contacts.map(contact => (
+               <h1>{contact.name}</h1>
+            ))}
+         </div>
+      )
+   };
+};
+
+- In the App.js file we need to import Contacts.js and add to our App component to render the Contacts.
+
+   import Contacts from "./components/Contacts";
+
+   class App extends Component {
+      render() {
+         return (
+            <div className="App">
+               <Header branding="Contact Manager" />
+               <div className="container">
+                  <Contacts />
+               </div>
+            </div>
+         );
+      }
+   }
+
+- We would want to use the Contact.js file to render the contact component from within our State. We would therefore add the import Contact into our Contacts.js file and then use the <Contact /> component within our map.
+- Using ES7 snippet in VS code enter imp, import and tab to have a import boiler snippet and edit:
+
+   import Contact from './Contact';
+
+- We can now use the Contact component within our Components and update our map to render the Contact component rather than the <h1>{contact.name}</h1> element:
+
+   render() {
+      const { contacts } = this.state;
+      return (
+         <div>
+            { contacts.map(contact => (
+               <Contact />
+            ))}
+         </div>
+      )
+   };
+
+- The Contact component takes in some properties and we will need to pass in those properties:
+
+   render() {
+      const { contacts } = this.state;
+      return (
+         <div>
+            { contacts.map(contact => (
+               <Contact
+                  name = { contact.name }
+                  email = { contact.email }
+                  phone = { contact.phone }
+               />
+            ))}
+         </div>
+      )
+   };
+
+- This will loop through the state and render the contact component for each contact. If we go into the JavaScript console this will give you a warning message:
+
+   index.js:2178 Warning: Each child in an array or iterator should have a unique "key" prop.
+
+- The map wants you to have a unique key value for our contact. Each contact has an id in our object and that is what you usually use for a key. So we can add to our map the id to get rid of the warning message:
+   render() {
+      const { contacts } = this.state;
+      return (
+         <div>
+            { contacts.map(contact => (
+               <Contact
+                  key = { contact.id }
+                  name = { contact.name }
+                  email = { contact.email }
+                  phone = { contact.phone }
+               />
+            ))}
+         </div>
+      )
+   };
+
+- If we look in our React web tools, within the Contacts component we should see our three Contact component for each contact. When we click on the Contact we should see the Props for that component:
+
+   Key "1"
+   Props
+      email: "jdoe@gmail.com"
+      name: "John Doe"
+      phone: "1111-2222222"
+
+- If we click on the Contacts component we should see in the React web tool, we should see a State with an array object:
+
+   Props
+      Empty Object
+   State
+      > contacts Array[3]
+         > 0: {...}
+            email: "jdoe@gmail.com"
+            id: 1
+            name: "John Doe"
+            phone: "1111-22222222"
+         > 1: {...}
+         > 2: {...}
+
+
+2) Use the state = {}:
+- Similar to the above but no need to create a constructor.
+- This is the easier way - you should only use a constructor if you require initialisation of the object.
+
+   class Contacts extends Component {
+      state = {
+         contact: [
+            {
+               id: 1,
+               name: 'John Doe',
+               email: 'jdoe@gmail.com',
+               phone: '1111-2222222'
+            },
+            {
+               id: 2,
+               name: 'Emily Parker',
+               email: 'eparker@gmail.com',
+               phone: '1111-3333333'
+            },
+            {
+               id: 3,
+               name: 'Katie Davis',
+               email: 'kdavis@gmail.com',
+               phone: '1111-4444444'
+            }
+         ]
+      }
+      ...
+   }
+
+- As a tidy up we can update the map to pass in the whole contact from the contact object:
+   render() {
+      const { contacts } = this.state;
+      return (
+         <div>
+            { contacts.map(contact => (
+               <Contact
+                  key = { contact.id }
+                  contacts = { contact }
+               />
+            ))}
+         </div>
+      )
+   };
+
+- In our Contact.js file we need to clean up the props as we no longer require the name, email and phone props but should now require the contact object values:
+   class Contact extends Component {
+      //propTypes within our class:
+      static propTypes = {
+         name: PropTypes.string.isRequired,
+         email: PropTypes.string.isRequired,
+         phone: PropTypes.string.isRequired
+      }
+
+      render() {
+         const { contact } = this.props;
+
+         return (
+            <div className="card card-body mb-3">
+               <h4>{contact.name}</h4>
+               <ul className="list-group">
+                  <li className="list-group-item">{contact.email}</li>
+                  <li className="list-group-item">{contact.phone}</li>
+               </ul>
+            </div>
+         )
+      }
+   }
+
+- We can go one step further and use destructuring:
+      render() {
+         const { name, email, phone } = this.props.contact;
+
+         return (
+            <div className="card card-body mb-3">
+               <h4>{name}</h4>
+               <ul className="list-group">
+                  <li className="list-group-item">{email}</li>
+                  <li className="list-group-item">{phone}</li>
+               </ul>
+            </div>
+         )
+      }
+   }
+
+- Finally we would need to adjust our PropTypes because we no longer have this.props.name, this.props.email and this.props.phone as we now only have the one contact property.
+- Contact is also no longer a string but a object property:
+
+   Previous:
+   Contact.PropTypes = {
+      name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      phone: PropTypes.number.isRequired
+   }
+
+   Now:
+   Contact.propTypes = {
+      contact: PropTypes.object.isRequired,
+   }
+
+We have now created a State that affects the render of our Contact component.
