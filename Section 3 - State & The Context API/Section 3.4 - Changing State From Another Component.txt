@@ -1,0 +1,79 @@
+----------------------------------------
+CHANGING STATE FROM ANOTHER COMPONENT
+----------------------------------------
+- What if we want to manipulate the State of a component from another component? For example, if we want a X icon in our Contact component which will trigger an event to delete a contact/remove it from the state that is in another component i.e. change the state within the Contacts component.
+- We would want to manipulate one component state from another component state. This is a big problem especially as your application starts to grow and you are sharing state between multiple components and multiple levels of nesting. This is where you would want to start getting into Redux or the Context API.
+- In this section we will explore how we would handle the above situation before exploring the Context API and Redux.
+
+- We want to delete a contact, however, the difficulty is that the contact component is not where the state is (its in Contacts and not the Contact component). 
+- We would want to create a delete button and when we click the button we would want a event handler which will have a function to run. We would have to set a separate property for that delete handler and then send it up the chain to Contacts and deal within the render() to deal with the handler.
+
+Contact.js File:
+- Create delete icon button and add onclick event to trigger onDeleteClick() function.
+
+   <i className="fas fa-times" style={{ cursor: "pointer", float: "right", color: "red" }} onClick = {this.onDeleteClick}></i>
+
+- Using the arrow function, create the onDeleteClick() function above the render() this will allow us to use the this keyword. We would then want to create a deleteClickHandler().
+
+   onDeleteClick = () => {
+      this.props.deleteClickHandler();
+   }
+
+- Since the deleteClickHandler is a property we want to add this to our propTypes as a function.
+
+   Contact.propTypes = {
+      contact: PropTypes.object.isRequired,
+      deleteClickHandler: PropTypes.func.isRequired
+   };
+
+- We need to add the deleteClickHandler to the Contacts.js return() method as this is a required propType.
+
+   render() {
+      const { contacts } = this.state;
+
+      return (
+         <React.Fragment>
+            { contacts.map(contact => (
+               <Contact
+                  key = { contact.id }
+                  contact = { contact }
+                  deleteClickHandler = { this.deleteContact }
+               />
+            ))}
+         </React.Fragment>
+      )
+   };
+
+- Then create the deleteContact() function within the Contacts.js file above the render().
+- Note: the State should always be at the top. The deleteContact function should be below the state but above the render() within the Contacts.js file.
+
+- We would need to update the Contacts component render() to add the id as a property within our deleteClickHandler so that we can use the id within our deleteContact() method.
+
+   return (
+      <React.Fragment>
+         { contacts.map(contact => (
+            <Contact
+               key = { contact.id }
+               contact = { contact }
+               deleteClickHandler = { this.deleteContact.bind(this, contact.id) }
+            />
+         ))}
+      </React.Fragment>
+   )
+
+   deleteContact = (id) => {
+      console.log(id);
+   }
+
+- Remember that State is immutable and cannot be manipulated and also we cannot use use setState() alone.
+- We need a new variable that we are going to store the results from our filter which will loop through our State and check for the condition where the contact.id is not equal to the id we passed in.
+- We then going to use setState and pass in the variable storing the new Contacts.
+
+   deleteContact = (id) => {
+      const { contacts } = this.state;
+      const newContacts = contacts.filter(contact => contact.id !== id);
+
+      this.setState({
+         contacts: newContacts
+      });
+   }
