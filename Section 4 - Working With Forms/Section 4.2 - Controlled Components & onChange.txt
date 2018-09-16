@@ -1,0 +1,27 @@
+----------------------------------------
+CONTROLLED COMPONENTS & ONCHANGE
+----------------------------------------
+- Continuing on from the last section, we are going to add an eventHandler onto our input fields to trigger the onChange of each key we press and update the particular State field.
+- When we type we want to change the State value with whatever we typed in. At the moment we have a controlled component that does not allow us to fill out our form.
+
+- On our input we are going to add onChange and set this to a function called onChange():
+
+   <input type="text" name="name" className="form-control form-control-lg" placeholder="Enter Name..." value={name} onChange={ this.onChange } />
+
+- Above the render() we will create our onChange() function which will deal with the onChange eventHandler to update the relevant state depending on the input field being typed into (i.e. one function for all three input fields rather than having three separate functions performing the same task).
+
+   onChange = e => this.setState({ [e.target.name]: e.target.value });
+
+- The e.target.name will get the name of the input element and as long as this is the same as the state name then the function above will update the correct state with the users input.
+
+- We are not going to be adding the actual functionality of submitting a form to add a new Contact at the moment, but we will setup the onSubmit function on our form and create the function:
+- On our form element we will add an onSubmit attribute and set it to this.state method.
+
+   <form onSubmit={this.onSubmit}>
+
+- Our onSubmit method will be an arrow function passing in the e event object and we will currently prevent the default behaviour of the form submit but also console.log the state which will print the name, email and phone number in our form.
+
+   onSubmit = (e) => {
+      e.preventDefault(); 
+      console.log(this.state);
+   }
