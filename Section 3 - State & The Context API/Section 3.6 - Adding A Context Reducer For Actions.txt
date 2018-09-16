@@ -1,0 +1,167 @@
+----------------------------------------
+ADDING A CONTEXT REDUCER FOR ACTIONS
+----------------------------------------
+- Previously we would have the click Event in Contact.js to handle the delete event by triggering off a this.props.deleteClickHandler() function which went up to Contacts.js to call another function called deleteContact.
+- In this Section we would want to clean up our code. The Contacts component should not have anything to do with the whole deleting of State.
+- We are going to create an Action within the context.js file.
+
+Contacts.js file updated to:
+   import React, { Component } from 'react';
+   import Contact from './Contact';
+   import { Consumer } from '../context';
+
+   class Contacts extends Component {
+      render() {
+         return(
+            <Consumer>
+               {value => {
+                  const { contacts } = value;
+
+                  return(
+                     <React.Fragment>
+                        { contacts.map(contact => (
+                           <Contact
+                              key = { contact.id }
+                              contact = { contact }
+                           />
+                        ))}
+                     </React.Fragment>
+                  );
+               }}
+            </Consumer>
+         )
+      };
+   };
+
+   export default Contacts;
+
+
+Contact.js file updated to:
+- We want to delete the this.props.deleteClickHandler(); from our onDeleteClick() function as well as to remove it from the Contact.Proptype.
+
+Before:
+   onDeleteClick = () => {
+      this.props.deleteClickHandler();
+   }
+   ...
+   Contact.propTypes = {
+      contact: PropTypes.object.isRequired,
+      deleteClickHandler: PropTypes.func.isRequired
+   };
+
+After:
+   onDeleteClick = () => {
+      
+   }
+   ...
+   Contact.propTypes = {
+      contact: PropTypes.object.isRequired,
+   };
+
+- Within our context.js file we want a Reducer which will use a switch statement to evaluate the action.type and then run the block of code based on the action:
+
+   const reducer = (state, action) => {
+      switch(action.type){
+         case 'DELETE_CONTACT':
+            return {
+               ...block code...
+            }
+      }
+   }
+
+- In our return we want the block code to update our State by deleting the contact. We would want to use the spread operator when dealing with States.
+- We would want to take the existing State and then filter out the contact that requires deleting/filtered out.
+- A payload is some data you want to send along with the action - in the case of deleting the contact we would want to pass in the id as the payload when performing the 'DELETE_CONTACT' action.
+- We may want a default case within our switch, which will return the the State.
+
+   const reducer = (state, action) => {
+      switch(action.type) {
+         case 'DELETE_CONTACT':
+            return {
+               ...state,
+               contacts: state.contacts.filter(contact => contact.id !== action.payload)
+            };
+         default:
+            return state;
+      }
+   }
+
+- We now need a way to actually call an action. We are going to have something within our State called a dispatch:
+
+   state = {
+      contacts: [
+         {
+            id: 1,
+            name: 'John Doe',
+            email: 'jdoe@gmail.com',
+            phone: '1111-2222222'
+         },
+         {
+            id: 2,
+            name: 'Emily Parker',
+            email: 'eparker@gmail.com',
+            phone: '1111-3333333'
+         },
+         {
+            id: 3,
+            name: 'Katie Davis',
+            email: 'kdavis@gmail.com',
+            phone: '1111-4444444'
+         }
+      ],
+      dispatch: action => this.setState(state => reducer(state, action))
+   };
+
+- The dispatch will take in an action which will be an arrow function, we want this.setState() to take in the state and point it to the reduce() which we created above which will take in the state and action.
+- When we have a consumer it consumes the entire state because that is what we are passing in, therefore, we should be able to access the dispatch from any component(s).
+
+- We need to import the Consumer from the context.js file into our Contact.js file as we did with our Contacts.js file:
+
+   import { Consumer } from '../context';
+
+- We want to go to the render() in our Contact.js file and have access to the dispatch so that we can call our action (function) to delete the contact.
+- We need to wrap our return() in a <Consumer> element in order to access the data and actions from the context. We can pass in value (which has the whole state) and use an arrow function for the rest of our html markup to display the UI contact form.
+- We need to destruct and pull out dispatch from value in order to be able to use it in our onDeleteClick() parameters.
+
+   return (
+      <Consumer>
+         {value => {
+            const { dispatch } = value;
+
+            return(
+               <div className="card card-body mb-3">
+                  <h4>{name}
+                     <i onClick = {() => this.setState({ showContactInfo: !this.state.showContactInfo })} className="fas fa-sort-down" style={{ cursor: "pointer" }}></i>
+                     <i className="fas fa-times" style={{ cursor: "pointer", float: "right", color: "red" }} onClick = {this.onDeleteClick}></i>
+                  </h4>
+                  {showContactInfo ? (
+                  <ul className="list-group">
+                     <li className="list-group-item">{email}</li>
+                     <li className="list-group-item">{phone}</li>
+                  </ul>
+                  ) : null}
+               </div>
+            )}
+         }
+      </Consumer>
+   );
+
+- To access the dispatch we need to pass it in as a parameter within our onDeleteClick() function.
+
+   Update from:
+   <i className="fas fa-times" style={{ cursor: "pointer", float: "right", color: "red" }} onClick = {this.onDeleteClick}></i>
+
+   Update to:
+   <i className="fas fa-times" style={{ cursor: "pointer", float: "right", color: "red" }} onClick = {this.onDeleteClick.bind(this, id, dispatch)}></i>
+
+- We can now update our onDeleteClick() function to pass in the parameters required to make the function work. We require id and dispatch in order to use the dispatch action created in our context.js file. Dispatch takes in an object which holds the action type and a payload which will have the id to perform the DELETE_CONTACT action.
+
+   onDeleteClick = (id, dispatch) => {
+      dispatch({type: 'DELETE_CONTACT', payload: id})
+   }
+
+- This will error as we need to update our code to deconstruct id from contacts. We added id to const {name, email, phone} = this.props.contact; as seen below:
+
+   render() {
+      const { id, name, email, phone } = this.props.contact;
+      const { showContactInfo } = this.state;
