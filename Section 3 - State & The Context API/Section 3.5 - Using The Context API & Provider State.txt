@@ -1,0 +1,125 @@
+----------------------------------------
+USING THE CONTEXT API & PROVIDER STATE
+----------------------------------------
+- The Context API allows us to have a single place for our application State.
+- This allows us to access our State from any component within our application.
+- We need to create a new context.js file within our src folder but outside the components folder. This file will become our provider component for our application.
+
+context.js File:
+- we need to import the React Component. 
+- Create a const variable called Context and set it to React.createContext().
+- We wan to export our Provider class which extends from the React Component class.
+- The Provider class will now act as our global state within our application.
+
+   import React, { Component } from 'react';
+
+   const Context = React.createContext();
+
+   export class Provider extends Component {
+      //Global State...
+   }
+
+- We need to remove the State from our Contacts.js components file and paste it into our Provider class within our context.js file:
+
+   export class Provider extends Component {
+      state = {
+         contacts: [
+            {
+               id: 1,
+               name: 'John Doe',
+               email: 'jdoe@gmail.com',
+               phone: '1111-2222222'
+            },
+            {
+               id: 2,
+               name: 'Emily Parker',
+               email: 'eparker@gmail.com',
+               phone: '1111-3333333'
+            },
+            {
+               id: 3,
+               name: 'Katie Davis',
+               email: 'kdavis@gmail.com',
+               phone: '1111-4444444'
+            }
+         ]
+      };
+   }
+
+- The provider will also have a render() method to return our Context.Provider and have a value property which will allow us to have access to anything within our Provider to be available to our application (e.g. value={this.state.contacts}). 
+- Below is an example of passing in the whole State (i.e. making the whole State accessible to anywhere we want to consume it):
+
+   render(){
+      return(
+         <Context.Provider value={this.state}>
+            {this.props.children}
+         </Context.Provider>
+      )
+   };
+
+- Finally we would want to export what is called a Consumer.
+- We have a Provider and then user the Consumer within any component(s) that we want to access the State from the Provider.
+- We will eventually have actions which are basically just functions to manipulate the State and we would want to access those from anywhere.
+
+   export const Consumer = Context.Consumer;
+
+- We need to go into our App.js file and bring in the provider using import:
+
+   import { Provider } from "./context";
+
+- We then need to wrap everything in our render() within the App.js file in the Provider component:
+
+   class App extends Component {
+      render() {
+         return (
+            <Provider>
+               <div className="App">
+                  <Header branding="Contact Manager" />
+                  <div className="container">
+                     <Contacts />
+                  </div>
+               </div>
+            </Provider>
+         );
+      }
+   }
+
+- We now want to go to the component that we would want to use the State in the context which is going to be our Contacts.js file. We would want to import the Consumer that we exported from our context.js file:
+
+   import { Consumer } from '../context';
+
+- Our Contacts.js will remain the same in terms of what we are rendering and our map will continue to map from contacts. The only difference is where we get contacts from i.e. from the Consumer.
+- We need to update our render to return our <Consumer> and pass in the property of value (the value property was assigned to this.state in our context.js file).
+- We then need to create an arrow function and destruct contacts to equal the value property in order to continue to use our <React.Fragment> block code:
+
+   render() {
+      return(
+         <Consumer>
+            {value => {
+               const { contacts } = value;
+
+               return(
+                  <React.Fragment>
+                     { contacts.map(contact => (
+                        <Contact
+                           key = { contact.id }
+                           contact = { contact }
+                           deleteClickHandler = { this.deleteContact.bind(this, contact.id) }
+                        />
+                     ))}
+                  </React.Fragment>
+               );
+            }}
+         </Consumer>
+      )
+   };
+};
+
+- To recap and reiterate the above process:
+   1) The context.js file now holds our application level State. We created our Provider which is giving off value property which can be assigned to the whole state or pieces of the State. Finally, we exported the Consumer.
+
+   2) In our App.js file we wrapped our whole application in the <Provider> so that we have access to the State.
+
+   3) Any component that we want access to the context.js we bring in using the import of the Consumer. We then return the <Consumer> tag which we can use the value property (value contains whatever State we passed in it). We then used destructuring to pull out the contacts from the value State. Finally we returned <React.Fragment> to use contacts from our provider to then loop using map and rendering each <Contact> UI from Contacts.js component using the data passed in from our Provider.
+
+- Note: our X delete button will not work because it is still acting as if we are taking the State from Contacts.js rather than context. In the next Section we will look at creating a Context Reducer For Actions. Actions are basically functions that manipulate the State in some way and then the reducer will create the effects of what we do in the UI.
