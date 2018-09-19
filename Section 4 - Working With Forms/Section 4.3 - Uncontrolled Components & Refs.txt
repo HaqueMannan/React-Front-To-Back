@@ -1,0 +1,61 @@
+----------------------------------------
+UNCONTROLLED COMPONENTS & REFS
+----------------------------------------
+- To create an uncontrolled components and state we would need to create some default props.
+
+AddContact_ref.js file (this is to demonstrate uncontrolled components but will not be part of the application):
+
+   static defaultProps = {
+      name: 'John Doe',
+      email: 'jdoe@gmail.com',
+      phone: '1111-2222222'
+   }
+
+- Below the render() we will change the const variables to point to this.props to get the default props values.
+
+   const { name, email, phone } = this.props;
+
+- This would add the defaultProps into your form input fields when you save and reload the file. However, you will receive a console warning message of "You provided a 'value' prop to a form field without an onChange handler. This will render a read only field..."
+- You cannot change the amend the field as it will be read-only. To make this editable we would need to change the input field value to defaultValue:
+
+Before:
+   <input type="text" name="name" className="form-control form-control-lg" placeholder="Enter Name..." value={name} />
+
+After:
+   <input type="text" name="name" className="form-control form-control-lg" placeholder="Enter Name..." defaultValue={name} />
+
+- When you save the file and reload your application, the warning message will go away and the input field are now editable.
+- This is what we call an uncontrolled component as it is not effecting the state.
+- We would want to get these fields when the form is submitted. Previously, we would have got the values from the State, however, in an uncontrolled component there are no State. The way we would capture these fields on submit of the form is to use Refs.
+- We would need to assign an additional attribute to our <input> field of ref for each input:
+
+   <input type="text" name="name" className="form-control form-control-lg" placeholder="Enter Name..." defaultValue={name} ref={this.nameInput} />
+
+   <input type="email" name="email" className="form-control form-control-lg" placeholder="Enter Email..." defaultValue={email} ref={this.emailInput} />
+
+   <input type="text" name="phone" className="form-control form-control-lg" placeholder="Enter Phone..." defaultValue={phone} ref={this.phoneInput} />
+
+- We would then need to create a constructor() and assign the input to React.createRef which will create the reference:
+
+   constructor(props) {
+      super(props);
+
+      this.nameInput = React.createRef();
+      this.emailInput = React.createRef();
+      this.phoneInput = React.createRef();
+   }
+
+- We now have a reference for each field and therefore when we submit the form we can call of the ref value using the .current.value method on the object:
+
+   onSubmit = (e) => {
+      e.preventDefault();
+
+      const Contact = {
+         name: this.nameInput.current.value,
+         email: this.emailInput.current.value,
+         phone: this.phoneInput.current.value
+      }
+      console.log(contact);
+   }
+
+- This is how we can use an uncontrolled component where we are not connecting each input with a State, but we are creating a ref on each input field so that we can grab the current value and add it to the onSubmit event. This will often be used with redux when bringing in props and you want to use them as a default value and then use the form to update whatever the resource is, we can use uncontrolled component method.
