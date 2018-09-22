@@ -1,0 +1,186 @@
+----------------------------------------
+ERROR CHECKING & DISPLAY
+----------------------------------------
+- Currently in our Form we can submit and empty form to create an empty contact. We could use the HTML5 required attribute in our <input> element to make the fields requiring something in the input field before the form can be submitted and ignore validation in React.
+- However, we will look at how we can add form validation and use bootstrap to display the validation error within our application.
+
+- In the AddContact.js component within the state we are going to add an errors object.
+
+   class AddContact extends Component {
+      state = {
+         name: '',
+         email: '',
+         phone: '',
+         errors: {}
+      }
+
+- When we click the submit button to call on the onSubmit() function we want to check to make sure that the name and email have been filled out. If not we want to add an error value to our errors object in order to display the error on screen.
+- We are using the if statement to check if the field is empty and if true then setting the state for the errors object. We need return; in our if statements to prevent the onSubmit() function submitting if there is an error.
+- We also want to clear the errors object in the state to an empty object on form submitted.
+
+   onSubmit = (dispatch, e) => {
+      e.preventDefault(); 
+
+      const {name, email, phone} = this.state;
+
+      //Check for Errors
+      if(name===''){
+         this.setState({errors: { name: 'Name is required.' }});
+         return;
+      }
+
+      if(email===''){
+         this.setState({errors: { email: 'Name is required.' }});
+         return;
+      }
+
+      if(phone===''){
+         this.setState({errors: { phone: 'Phone is required.' }});
+         return;
+      }
+
+      const newContact = {
+         id: uuid(),
+         name,
+         email,
+         phone
+      }
+
+      dispatch ({type:'ADD_CONTACT', payload: newContact});
+
+      //Clear State
+      this.setState({
+         name: '',
+         email: '',
+         phone: '',
+         errors: {}
+      })
+   }
+
+- We now need to pass in the errors for that particular field into the TextInputGroup component (it is now going to have a new prop called error). We will need to pull our errors from the state:
+
+   render() {
+      const { name, email, phone, errors } = this.state;
+
+      return(
+         ...return(
+            <TextInputGroup 
+               label= "Name"
+               name= "name"
+               placeholder= "Enter Name..."
+               value= { name }
+               onChange= { this.onChange }
+               error= { errors.name }
+            />
+            <TextInputGroup 
+               label= "Email"
+               name= "email"
+               type= "email"
+               placeholder= "Enter Email..."
+               value= { email }
+               onChange= { this.onChange }
+               error= { errors.email }
+            />
+            <TextInputGroup 
+               label= "Phone"
+               name= "phone"
+               placeholder= "Enter Phone..."
+               value= { phone }
+               onChange= { this.onChange }
+               error= { errors.phone }
+            />
+         )
+      )
+   }
+
+- Anything that is within the errors.name will be passed into the error as a property. same with the email and the phone. If anything does exist then it will have the error message inside the prop for the TextInputGroup.
+
+- We need to go to our TextInputGroup.js file and accept the error as a prop for the TextInputGroup component:
+
+   const TextInputGroup = ({
+      label,
+      name,
+      value,
+      placeholder,
+      type,
+      onChange,
+      error
+
+- Once we have the error prop we now need to deal with it in the render(). The way bootstrap deals with errors is to add the class of isInvalid to your <input> element and have another <div> element with the class of "invalid-feedback" with the message to display on the screen below the input field.
+- We need an conditional className to see if there is an error for the particular input field and if true we need to put the class of isInvalid. 
+- React does not have in its core library to have a conditional className, so what most people use is a module called classnames. To install this go into terminal within your project directory and install the module using npm. This will be added in our package.json file as a dependency:
+
+   > npm i classnames
+
+- We will import classnames into our TextInputGroup.js file:
+
+   import classnames from 'classnames';
+
+- To add the conditional className we would need to update the input field className to call on the classnames() function:
+
+Before:
+   return (
+      <div className="form-group">
+         <label htmlFor={ name }> { label } </label>
+         <input
+            type= { type }
+            name= { name }
+            className= "form-control form-control-lg" 
+            placeholder= { placeholder }
+            value= { value }
+            onChange= { onChange }
+         />
+      </div>
+   )
+
+After:
+   return (
+      <div className="form-group">
+         <label htmlFor={ name }> { label } </label>
+         <input
+            type= { type }
+            name= { name }
+            className= { classnames("form-control form-control-lg", {"is-invalid": error}) }
+            placeholder= { placeholder }
+            value= { value }
+            onChange= { onChange }
+         />
+      </div>
+   )
+
+- The classnames() function takes in 2 parameters:
+1) Any classes that we want to apply by default e.g. we want the "form-control form-control-lg" as default.
+2) An object that contains the classname that we want and then the condition it depends upon for e.g. "is-invalid": error
+
+   className= { classnames("form-control form-control-lg", "is-invalid": error) }
+
+- We would then want to add the <div> to display the bootstrap error message but be triggered by an expression if there is an error:
+
+   return (
+      <div className="form-group">
+         <label htmlFor={ name }> { label } </label>
+         <input
+            type= { type }
+            name= { name }
+            className= { classnames("form-control form-control-lg", {"is-invalid": error}) }
+            placeholder= { placeholder }
+            value= { value }
+            onChange= { onChange }
+         />
+         {error && <div className="invalid-feedback">{error}</div>}
+      </div>
+   )
+
+- Since error is a property we need to add it to our propTypes:
+
+   TextInputGroup.propTypes = {
+      label: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      placeholder: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      onChange: PropTypes.func.isRequired,
+      error: PropTypes.string
+   }
+
+- This will create our form validation to ensure the fields are not left blank.
