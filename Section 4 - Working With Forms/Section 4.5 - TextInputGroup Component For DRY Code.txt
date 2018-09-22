@@ -1,0 +1,142 @@
+----------------------------------------
+TEXTINPUTGROUP COMPONENT FOR DRY CODE
+----------------------------------------
+- DRY Code stands for Don't Repeat Yourself Code.
+- We are going to create a TextInputGroup.js component for each of the input fields within our form. This file will be located in the layout folder.
+
+- The below will become a stateless functional component with properties only i.e. the name, type etc. will be properties:
+
+   <div className="form-group">
+      <label htmlFor="name">Name</label>
+      <input type="text" name="name" className="form-control form-control-lg" placeholder="Enter Name..." value={name} onChange={ this.onChange } />
+   </div>
+
+TextInputGroup.js File:
+- rfc tab will give the base template snippet code for the React function component.
+- imp tab will give the base template snippet code for the PropTypes import.
+
+   import React from 'react';
+   import PropTypes from 'prop-types'
+
+   export default () => {
+      return (
+         <div>
+
+         </div>
+      )
+   }
+
+- Give the component a name and export the default component:
+
+   const TextInputGroup = () => {
+      return (
+         <div>
+
+         </div>
+      )
+   }
+
+   export default TextInputGroup;
+
+- This functional component will take everything as props. We will use destructuring so that we do not need to use props.xxxx in our code. We need to put in all the props we expect.
+
+   const TextInputGroup = ({
+      label,
+      name,
+      value,
+      placeholder,
+      type,
+      onChange
+   }) => {
+      return (
+         <div>
+
+         </div>
+      )
+   }
+
+- In our return() we want to grab all of our first <div> form-group. This will act as a template for the component which we can pass in the properties above to make it dynamic for each form input field.
+
+   const TextInputGroup = ({
+      label,
+      name,
+      value,
+      placeholder,
+      type,
+      onChange
+   }) => {
+      return (
+         <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input type="text" name="name" className="form-control form-control-lg" placeholder="Enter Name..." value={name} onChange={ this.onChange } />
+         </div>
+      )
+   }
+
+- We would want to make certain fields dynamic using the props as values:
+
+   return (
+      <div className="form-group">
+         <label htmlFor={ name }> { label } </label>
+         <input
+            type= { type }
+            name= { name }
+            className= "form-control form-control-lg" 
+            placeholder= { placeholder }
+            value= { value }
+            onChange= { onChange }
+         />
+      </div>
+   )
+
+- We now need to add our PropTypes and any default PropTypes we have:
+
+   TextInputGroup.propTypes = {
+      label: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      placeholder: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      onChange: PropTypes.func.isRequired
+   }
+
+- The only PropTypes that we want as a default is the type which will be defaulted to text. Most of our input fields are of the type text, only exception of the email which we will pass in the type of email where required. Therefore we can default in our type value:
+
+   TextInputGroup.defaultProps = {
+      type: 'text'
+   }
+
+- That should be everything for our TextInputGroup component. All we need to do now is implement it within our Application.
+
+
+AddContact.js File:
+- In our AddContact.js file we need to import the component (we do not need the {} curly braces around the component name because it has been exported as default):
+
+   import TextInputGroup from '../layout/TextInputGroup'
+
+- We are now going to go to our render() and locate our first form group and replace it with the TextInputGroup component passing in the relevant props.
+
+   <TextInputGroup
+      label= "Name"
+      name= "name"
+      placeholder= "Enter Name..."
+      value= { name }
+      onChange= { this.onChange }
+   />
+   <TextInputGroup
+      label= "Email"
+      name= "email"
+      type= "email"
+      placeholder= "Enter Email..."
+      value= { email }
+      onChange= { this.onChange }
+   />
+   <TextInputGroup
+      label= "Phone"
+      name= "phone"
+      placeholder= "Enter Phone..."
+      value= { phone }
+      onChange= { this.onChange }
+   />
+
+- This application should continue to function but now we have TextInputGroup component to render the each form fields. The code is much cleaner and we are adopting the DRY principal.
