@@ -1,0 +1,33 @@
+----------------------------------------
+404 PAGE NOT FOUND
+----------------------------------------
+- To create a 404 Not Found page in your application, go to your src/components/pages folder and create a new file called NotFound.js which will act as our 404 Page Not Found component which we can use in our App.js file.
+
+NotFound.js File:
+- You can design your 404 Page Not Found to look like whatever you want.
+
+   import React from 'react';
+
+   export default () => {
+      return (
+         <div>
+            <h1 className="display-4"><span className="text-danger">404</span> Page Not Found</h1>
+            <p className="lead">Sorry, that page does not exist.</p>
+         </div>
+      );
+   };
+
+
+App.js File:
+- In order for this to work we need to bring in the component into our file and then within our <Switch> the very last <Route /> we create requires only the component property which will point to the {NotFound} component we created above.
+
+   import NotFound from "./components/pages/NotFound";
+
+   <Switch>
+      <Route exact path="/" component={Contacts} />
+      <Route exact path="/contact/add" component={AddContact} />
+      <Route exact path="/about" component={About} />
+      <Route component={NotFound} />
+   </Switch>
+
+- We do not require a path for the 404 Page. If we now try to enter a url where no route exists, this will display your 404 Page Not Found.
