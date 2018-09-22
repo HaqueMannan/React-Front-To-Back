@@ -1,0 +1,111 @@
+----------------------------------------
+LINKS, PARAMS & REDIRECT
+----------------------------------------
+LINKS:
+- To create links in HTML we usually would normally use an <a href=""> element with the page link provided in href attribute; however, in React we do not want to do this. Instead we would want to use Links from the react-router-dom module.
+
+Header.js File:
+- Import Links from react-router-dom:
+
+   import { Link } from 'react-router-dom';
+
+- Instead of using the <a> tag, we want to replace this with a <Link> tag. Also, instead of using the href attribute, we want to replace this with the to attribute:
+
+Before:
+   return (
+      <nav className="navbar navbar-expand-sm navbar-dark bg-danger mb-3 py-0">
+         <div className="container">
+            <a href="/" className="navbar-brand">{ branding }</a>
+            <div>
+               <ul className="navbar-nav mr-auto">
+                  <li className="nav-item">
+                     <a href="/" className="nav-link">Home</a>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+   );
+
+After:
+   return (
+      <nav className="navbar navbar-expand-sm navbar-dark bg-danger mb-3 py-0">
+         <div className="container">
+            <a href="/" className="navbar-brand">{ branding }</a>
+            <div>
+               <ul className="navbar-nav mr-auto">
+                  <li className="nav-item">
+                     <Link to="/" className="nav-link">Home</Link>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+   );
+
+- We can now add more links in our navbar e.g. About Link and the Add Contact Link which will send the user to the Route path:
+
+   return (
+      <nav className="navbar navbar-expand-sm navbar-dark bg-danger mb-3 py-0">
+         <div className="container">
+            <a href="/" className="navbar-brand">{ branding }</a>
+            <div>
+               <ul className="navbar-nav mr-auto">
+                  <li className="nav-item">
+                     <Link to="/" className="nav-link">Home</Link>
+                  </li>
+                  <li className="nav-item">
+                     <Link to="/contact/add" className="nav-link">Add Contact</Link>
+                  </li>
+                  <li className="nav-item">
+                     <Link to="/about" className="nav-link">About</Link>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+   );
+
+- Links allows the user to move through different pages and displaying different components on the page without refreshing the page - this is all done through routes.
+
+Test for yourself: 
+- Click on the Add Contact link and complete the form to create a new contact. 
+- Now click on the Home Link to navigate to the Contact List page. You should see the newly created contact within the list. Notice how the page did not reload but it re-rendered what was displayed in the browser. This is why we can view the newly created contact within our list.
+- Now try clicking on the "Contact Manager" from the Navbar. Notice that this is a <a> tag link which is linked to the index page.
+- Notice how the browser reloads the index.html page. The newly created contact no longer appears within the list (this is because we are not persisting the data to a database).
+- This is the difference between <Links> and <a> tags. The <Link> tag allows you to change the browser route path which will re-render components on the screen rather than refreshing the whole application.
+
+
+PARAMETERS:
+- To create links which have parameters such as an id (e.g. http://localhost:3000/about/1) we can add this to our route:
+
+App.js File:
+- Simply add :id to the path which allows us to have an id parameter. If we now navigate to http://localhost:3000/about/1 this will take us to the About page. 
+
+      <Route exact path="/about/:id" component={About} />
+
+About.js File:
+- To access the id within our About.js file and display it on our page, we can use the .match.params followed by the whatever the name of the parameter is (i.e. id)  that we wish to access:
+   import React from 'react'
+
+   export default (props) => {
+      return (
+         <div>
+            <h1 className="display-4">{props.match.param.id}</h1>
+            <p className="lead">Simple App to manage contacts.</p>
+            <p className="text-secondary">Version 1.0.0</p>
+         </div>
+      )
+   }
+
+- When we navigate to http://localhost:3000/about/1 the About page has access to the id parameter to be able to display it as a <h1> element i.e. it will display 1. If we navigate to http://localhost:3000/about/About this will display About in our about page.
+- Whatever we call the parameter (e.g. /:name) in our within our App.js file, to have access to that parameter using the .match.params. we need to pass in the same parameter name (e.g. .match.params.name).
+
+
+REDIRECT:
+- Redirects are important in applications as it allows you to redirect the user to a different page after an action. For example, in our application we may wish to redirect the user to the home page after they complete and submit a new contact using the form in order for the user to see the changes to the contact list.
+- To add a redirect in the above case, we would go to the onSubmit() function within our AddContact.js component and at the very end add the following code:
+
+   this.props.history.push('/');
+
+- Within the this.props we have something called history and in history we have a method called push(). We can pass in the parameter of the url link we want to redirect the user to. In the above we are redirecting the user to the home path which is '/' - if we changed this to '/about' this will redirect to the About page.
