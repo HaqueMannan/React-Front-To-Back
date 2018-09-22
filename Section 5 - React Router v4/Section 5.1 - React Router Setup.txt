@@ -1,0 +1,111 @@
+----------------------------------------
+REACT ROUTER SETUP
+----------------------------------------
+- React Router allows you to have different routes for your application. 
+- Up until now, everything that has been created in the contactmanager application is sitting within the single index page.
+- The React library does not have a router and therefore the React Router package must be installed separately (this is the same for any other packages you may wish to use with React). 
+- React with a couple of other packages will make it into a framework.
+- To install React Router v4 for our application, open our file directory in terminal and run the following command:
+
+   > npm i react-router-dom
+
+- This will add "react-dom": "^16.5.0" and "react-router-dom": "^4.3.1" in your package.json file.
+
+
+App.js File:
+- We need to import 3 things from the react-router-dom into our App.js file:
+1) BrowserRouter - the parent component that stores all of your route components. We usually give this an alias of Router.
+2) Route - holds all of our routes.
+3) Switch - allows us to have a default page and a not-found page (can be used for other usage as well).
+
+   import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+- We want to wrap all our render components (except for the <Provider> which is the outermost component) in a Router.
+- Note we are using Router which is the alias of BrowserRouter.
+
+   class App extends Component {
+      render() {
+         return (
+            <Provider>
+               <Router>
+                  <div className="App">
+                     <Header branding="Contact Manager" />
+                     <div className="container">
+                        <AddContact />
+                        <Contacts />
+                     </div>
+                  </div>
+               </Router>
+            </Provider>
+         );
+      }
+   }
+
+- We can now add Routes for our component so that it will appear in whichever path we go to. The <Routes> will be wrapped in the <Switch>.
+- Note we would want the header on every page so we will not add a route to the <Header> component.
+
+   class App extends Component {
+      render() {
+         return (
+            <Provider>
+               <Router>
+                  <div className="App">
+                     <Header branding="Contact Manager" />
+                     <div className="container">
+                        <Switch>
+                           <Route ...>
+                        </Switch>
+                     </div>
+                  </div>
+               </Router>
+            </Provider>
+         );
+      }
+   }
+
+- The Route takes in a couple of parameters:
+1) exact - to match the exact path.
+2) path="" - the path you want
+3) component - define the component we want to appear.
+
+   <Switch>
+      <Route exact path="/" component={Contacts} />
+   </Switch>
+
+- The above will show the Contacts component when we go to the index/home page.
+
+- In our src/components folder we will add another folder called pages. This will hold all your static pages that you want in your application.
+- We will create a new file in the page folder called About.js - this will be a very simple functional component:
+
+   import React from 'react'
+
+   export default () => {
+      return (
+         <div>
+            <h1 className="display-4">About Contact Manager</h1>
+            <p className="lead">Simple App to manage contacts.</p>
+            <p className="text-secondary">Version 1.0.0</p>
+         </div>
+      )
+   }
+
+- We would want to bring in the About.js file into our App.js and create a <Route> for our about page:
+
+   import About from "./components/pages/About";
+
+   <Switch>
+      <Route exact path="/" component={Contacts} />
+      <Route exact path="/about" component={About} />
+   </Switch>
+
+- When we now navigate in our browser to the /about path (i.e. http://localhost:3000/about) this will display the About Page. The "/" path (i.e. http://localhost:3000/) will display our Contacts from our index page.
+
+- We can add our AddContact form component to route to /contact/add path:
+
+   <Switch>
+      <Route exact path="/" component={Contacts} />
+      <Route exact path="/contact/add" component={AddContact} />
+      <Route exact path="/about" component={About} />
+   </Switch>
+
+- We have now added routes to our application to display our components on different route paths.
