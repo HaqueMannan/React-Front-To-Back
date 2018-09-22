@@ -1,0 +1,160 @@
+----------------------------------------
+FORM SUBMIT ACTION TO CONTEXT
+----------------------------------------
+- We want to create a Action Type for the form submit button (similar to what we did for the DELETE_CONTACT).
+- In context.js we want to create another case called ADD_CONTACT.
+
+   const reducer = (state, action) => {
+      switch(action.type) {
+         case 'DELETE_CONTACT':
+            return {
+               ...state,
+               contacts: state.contacts.filter(contact => contact.id !== action.payload)
+            };
+         case 'ADD_CONTACT':
+            return {
+               ...state,
+            };
+         default:
+            return state;
+      }
+   }
+
+- We want to return an object from our ADD_CONTACT action and we want the initial State using the spread operator (...) because the State is immutable. We want to take the contacts (which is the array of objects) from the payload that we are going to send i.e. the entire contact with the id, name, email and phone.
+
+   case 'ADD_CONTACT':
+      return {
+         ...state,
+         contacts: [action.payload, ...state.contacts]
+      };
+
+- The action.payload will take the current state from the spread operator and add the new contact from the form. We can now run our dispatch and call on the ADD_CONTACT action.
+
+- In our AddContact.js file we need to bring in our consumer in order to deal with the context and bring in our value property.
+
+   import {consumer} from '../../context';
+
+   render() {
+      const { name, email, phone } = this.state;
+
+      return(
+         <Consumer>
+            {value => {
+               const { dispatch } = value;
+               return(
+                  <div className="card mb-3">
+                     <div className="card-header">Add Contact</div>
+                     <div className="card-body">
+                        <form onSubmit={this.onSubmit}>
+                           <div className="form-group">
+                              <label htmlFor="name">Name</label>
+                              <input type="text" name="name" className="form-control form-control-lg" placeholder="Enter Name..." value={name} onChange={ this.onChange } />
+                           </div>
+                           <div>
+                              <label htmlFor="email">Email</label>
+                              <input type="email" name="email" className="form-control form-control-lg" placeholder="Enter Email..." value={email} onChange={ this.onChange } />
+                           </div>
+                           <div>
+                              <label htmlFor="phone">Phone</label>
+                              <input type="text" name="phone" className="form-control form-control-lg" placeholder="Enter Phone..." value={phone} onChange={ this.onChange } />
+                           </div>
+                           <br />
+                           <input type="submit" value="Add Contact" className="btn btn-light btn-block" />
+                        </form>
+                     </div>
+                  </div>
+               )
+            }}
+         </Consumer>
+      )
+   };
+
+- We now have access the to dispatch which allows us to call an action i.e. the ADD_CONTACT on our form submit button. We want to pass in our dispatch in the onSubmit so that we can use it within the onSubmit function. 
+
+   {this.onSubmit.bind(this, dispatch)}
+
+- We can now go to the onSubmit() function and call on the dispatch;
+
+before:
+   onSubmit = (e) => {
+      e.preventDefault(); 
+      console.log(this.state);
+   }
+now:
+   onSubmit = (dispatch, e) => {
+      e.preventDefault(); 
+
+      const {name, email, phone} = this.state;
+
+      const newContact = {
+         name,
+         email,
+         phone
+      }
+   }
+
+- To generate the id we can use a npm package called uuid which we can install using the terminal:
+
+   > nmp i uuid
+
+- in our AddContact.js file we can import the uuid package:
+
+   import uuid from 'uuid';
+
+- To use uuid to generate a unique id for our newContact object we would call on the uuid() function:
+
+   onSubmit = (dispatch, e) => {
+      e.preventDefault(); 
+
+      const {name, email, phone} = this.state;
+
+      const newContact = {
+         id: uuid(),
+         name,
+         email,
+         phone
+      }
+   }
+
+- Finally, we would call on dispatch and pass in an object with a type and a payload.
+
+   onSubmit = (dispatch, e) => {
+      e.preventDefault(); 
+
+      const {name, email, phone} = this.state;
+
+      const newContact = {
+         id: uuid(),
+         name,
+         email,
+         phone
+      }
+
+      dispatch ({type:'ADD_CONTACT', payload: newContact});
+   }
+
+- Once we submit the form we would want to clear the form fields:
+
+   onSubmit = (dispatch, e) => {
+      e.preventDefault(); 
+
+      const {name, email, phone} = this.state;
+
+      const newContact = {
+         id: uuid(),
+         name,
+         email,
+         phone
+      }
+
+      dispatch ({type:'ADD_CONTACT', payload: newContact});
+
+      //Clear State
+      this.setState({
+         name: '',
+         email: '',
+         phone: ''
+      })
+   }
+
+- We now have a form submit action that will add new contacts to our form.
