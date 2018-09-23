@@ -1,0 +1,72 @@
+----------------------------------------
+EDITCONTACT COMPONENT & FETCH CONTACT
+----------------------------------------
+- We are going to create an EditContact.js component in our application. We would need to fetch the actual contact from the API and put it into the form in order to edit the contact.
+- In src/components/contact folder we created the EditContact.js file.
+- The EditContact.js file will be very similar to the AddContact.js component file.
+- In our App.js file we will bring in the EditContact component using the import and then add the Route Path which will also bring in the id for the object we wish to edit:
+
+App.js File:
+   import EditContact from "./components/contacts/EditContact"
+
+   <Route exact path="/contact/edit/:id" component={EditContact} />
+
+- We now need a way to get to the Edit contact route within our application because at the moment there is no link. We want to have a pencil icon that will route the user to the edit page as well as pass in the id of the object we clicked in the url.
+- In the contact.js component we need to import {Link} from react-router-dom and then in our render() after the delete icon add the link to our EditContact component.
+- We have access to id because we deconstruct it from contacts in order to use it within our Link object literal:
+
+   import { Link } from 'react-router-dom';
+
+   render() {
+      const { id, name, email, phone } = this.props.contact;
+      const { showContactInfo } = this.state;
+
+      return (
+         <Consumer>
+            {value => {
+               const { dispatch } = value;
+               return(
+                  <div className="card card-body mb-3">
+                     <h4>{name}
+                        <i onClick = {() => this.setState({ showContactInfo: !this.state.showContactInfo })} className="fas fa-sort-down" style={{ cursor: "pointer" }}></i>
+                        <i className="fas fa-times" style={{ cursor: "pointer", float: "right", color: "red" }} onClick = {this.onDeleteClick.bind(this, id, dispatch)}></i>
+                        <Link to={`contact/edit/${id}`}>
+                           <i className="fas fa-pencil-alt"
+                           style={{
+                              cursor: 'pointer',
+                              float: 'right',
+                              color: 'black',
+                              marginRight: '1rem'
+                           }}></i>
+                        </Link>
+                     </h4>
+                     {showContactInfo ? (
+                     <ul className="list-group">
+                        <li className="list-group-item">{email}</li>
+                        <li className="list-group-item">{phone}</li>
+                     </ul>
+                     ) : null}
+                  </div>
+               )}
+            }
+         </Consumer>
+      );
+   }
+
+- We now want to fetch this contact from the backend and put the data into the form through the State. We will use componentDidMount() Lifecycle method to do this. 
+- So in our EditContact.js component file below the State we will add the following:
+
+   async componentDidMount(){
+      const { id } = this.props.match.params;
+      const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
+
+      const contact = res.data;
+      
+      this.setState({
+         name: contact.name,
+         email: contact.email,
+         phone: contact.phone
+      })
+   }
+
+- This will bring in our contact and fill in the form with the data. We are also able to change the State of the form field because of the onChange event allowing us to edit the controlled state.
