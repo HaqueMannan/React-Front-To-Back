@@ -1,0 +1,43 @@
+----------------------------------------
+LIFECYCLE METHODS
+----------------------------------------
+- Lifecycle methods are only available in class based components.
+- The render() is an example of a Lifecycle method which requires firing off in order to render components onto our page. There are other Lifecycle methods available in React.
+- We created a Test.js file within our application to demonstrate the various Lifecycle methods available.
+- We do not require arrow functions for Lifecycle methods because they are part of the React Component class.
+
+Lifecycle Methods:
+1) render()
+   - Renders jsx/html in your browser.
+
+2) componentsDidMount()
+   - This will fire off when the component mounts.
+   - This is the second most used Lifecycle method.
+   - This is where you make your HTTP calls to an API or a backend. If your fetching data from within your component and putting it into the component state, this is usually where you would call the initial request.
+
+3) componentsWillMount()
+   - This will fire off before the componentsDidMount.
+
+4) componentsDidUpdate()
+   - This will fire off when a component updates.
+
+5) componentsWillUpdate()
+   - This will fire off when a component updates.
+
+6) componentWillReceiveProps(nextProp, nextState)
+   - When your component receives new properties then this will fire off.
+   - This is usually used with Redux e.g. when you have a Application State in Redux, you can take it into a single component and can map it as component Props (turn State into Props). This is when this Lyfecycle will run and you can get the newProps that are coming in and do whatever you want.
+
+
+- Note: componentsDidMount(), componentsWillUpdate() and componentWillReceiveProps(nextProp, nextState) are being deprecated. You can still use them within React 17 (the next version of React) but you have to use the UNSAFE_ flag before the Lyfecycle method e.g. UNSAFE_componentWillMount() in order to use them.
+Interesting article to read:
+https://medium.com/@baphemot/understanding-react-react-16-3-component-life-cycle-23129bc7a705
+https://reactjs.org/docs/state-and-lifecycle.html
+
+New Lyfecycle methods:
+7) static getDerivedStateFromProps(nextProp, prevState)
+   - You have to return a state or null.
+   - Replaces the componentnsWill Lyfecycle's which are being deprecated.
+
+8) getSnapshotBeforeUpdate(prevProps, prevState)
+   - Fires off before mutations are made i.e. before the DOM is updated.
