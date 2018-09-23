@@ -1,0 +1,89 @@
+----------------------------------------
+POST & DELETE REQUESTS
+----------------------------------------
+- A POST HTTP request allows you to add new data to a back-end database.
+- A DELETE HTTP request allows you to delete existing data from a back-end database.
+- We are using https://jsonplaceholder.typicode.com as our back-end fake REST API
+- We will update our contactmanager application so that we can post and delete data in our fake REST API.
+
+DELETE Request (Contact.js File):
+- In our onDeleteClick() function it is making a dispatch to the context.js which calls on the DELETE_CONTACT action which deletes the contact within the DOM. However, if this was a front-end to a back-end website, we would have to make some kind of HTTP request to delete it from the back-end database. This is what we are going to mimic in our application.
+- In our onDeleteClick() function we are going to make a DELETE request using axios.
+- Firstly, we need to import axios:
+
+   import axios from 'axios';
+
+- We want to make a DELETE request within our onDeleteClick() function:
+
+   onDeleteClick = (id, dispatch) => {
+      axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`)
+      .then(res => dispatch({type: 'DELETE_CONTACT', payload: id}))
+   }
+
+- We are using a template string so that we can pass in the id within the url so that the particular id for the contact we wish to delete is deleted from the DELETE request. 
+- Axios returns a promise, so once we have made the request and got the response we want to .then to make the dispatch to delete it from the DOM.
+
+- To make sure that we are making a HTTP request, if we go into our developer tools within the browser and click on the Network tab. If we refresh the application and make a delete request again, in the Name area we will see 1 (or a id number of the deleted data). If we click on it and view the Header tab we can see the Request we made e.g. if we delete the first record we will see:
+
+   Headers:
+   Request URL: https://jsonplaceholder.typicode.com/users/1
+   Request Method: DELETE
+   Status Code: 200
+
+   Response:
+   {}
+
+- We have an empty object for the response because we did a DELETE request and it didn't actually return a data to us. We are mimicing a full stack application but only doing it on the front-end. If this was a full stack application, we would build the API and not use the jsonplaceholder.
+
+POST Request (AddContact.js File):
+- Firstly, import axios library in order to use the axios.
+
+   import axios from 'axios';
+
+- Update the onSubmit() function:
+1) We no longer need the uuid because the jsonplaceholder (like most APIs/database) adds the id itself using an auto increment and therefore we do not need to generate the id oursleves:
+
+Before:
+   import uuid from 'uuid';
+
+   const newContact = {
+      id: uuid(),
+      name,
+      email,
+      phone
+   }
+
+After:
+   const newContact = {
+      name,
+      email,
+      phone
+   }
+
+2) Using axios we can create the POST request to return a promise. In the promise response it will give a new data with the added contact. We would want to the the response and make the dispatch (ADD_CONTACT action) to update the DOM with the new list of contacts:
+
+Before:
+   dispatch ({type:'ADD_CONTACT', payload: newContact});
+
+After:
+   axios.post('https://jsonplaceholder.typicode.com/users', newContact)
+   .then(res => dispatch ({type:'ADD_CONTACT', payload: res.data}));
+
+
+- Axios Post method takes in 2 parameters, the URL link and the newContact object to POST.
+- We no longer need the payload to be the newContact as we can now use the returned response data (res.data) as the payload data to update the DOM. That way we can get the id from the res.data because it will create the id for us.
+
+- To make sure that we are making a HTTP request we can look at the network when we complete and submit the form:
+
+   Headers:
+   Request URL: https://jsonplaceholder.typicode.com/users
+   Request Method: POST
+   Status Code: 201
+
+   Response:
+   {
+      "name": "John William",
+      "email": "jwilliam@gmail.com",
+      "phone": "2222-2222222",
+      "id": 11
+   }
