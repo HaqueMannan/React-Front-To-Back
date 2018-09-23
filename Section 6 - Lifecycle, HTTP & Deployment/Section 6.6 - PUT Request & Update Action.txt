@@ -1,0 +1,34 @@
+----------------------------------------
+PUT REQUEST & UPDATE ACTION
+----------------------------------------
+- A PUT request is an update action.
+- We are going make our application able to update a contact and we actually want to send a PUT request out to jsonplaceholder and get a response and then we want to basically run our dispatch that is going to go to our context and update it.
+- In the EditContact.js component we want to be within the onSubmit() function and place our code under all the error checking and before the Clear State. This is where we will make our PUT request and require the id which we can get from the URL:
+
+   onSubmit = async (dispatch, e) => {
+      ...
+
+      const updContact = {
+         name,
+         email,
+         phone
+      }
+
+      const { id } = this.props.match.params;
+      const res = await axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, updContact);
+
+      dispatch({type: 'UPDATE_CONTACT', payload: res.data})
+
+      ...
+   };
+
+- We now need to go to the context.js component file and create the UPDATE_CONTACT dispatch action.
+- We are going to use the map function to update the State.
+
+   case 'UPDATE_CONTACT':
+      return {
+         ...state,
+         contacts: state.contacts.map(contact => contact.id === action.payload.id ? (contact = action.payload) : contact)
+      }
+
+- The above code will take the current State and then run the map() function and will loop using an ternary function to check if the current contact id is equal to the payload id and if true then the contact will be updated to the current payload else the contact will remain the same. This will create our ew State object with the updated contact.
