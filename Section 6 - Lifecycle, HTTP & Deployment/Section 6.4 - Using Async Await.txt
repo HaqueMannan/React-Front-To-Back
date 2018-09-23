@@ -1,0 +1,87 @@
+----------------------------------------
+USING ASYNC/AWAIT
+----------------------------------------
+- We are going to refactor our requests we made with Axios to Async/Await.
+- Async/Await provides us with a new cleaner syntax to make HTTP call request and allow us to get the response and handle it (instead of using the .get to make the call and the .then to handle to response). 
+- Async/Await allows us to assign the response to a variable and we can use that variable to handle the response.
+
+Update Context.js File to GET the contacts from the API for the State:
+- We need to mark the componentDidMount as async.
+- We want to assign the response to a variable e.g. const res = await axios.get('URL'). This will put the GET response into the const res variable. 
+- We need to mark the HTTP request with the await keyword. Since the componentDidMount() is an asynchronous function we need to wait for the GET method to finish to put the response in the variable before we can run the next peice of code (which is what the await keyword does).
+- We can now use/handle the variable which holds the response e.g. this.setState({contacts: res.data})
+
+Before:
+   componentDidMount(){
+      axios.get('https://jsonplaceholder.typicode.com/users')
+      .then(res => this.setState({ contacts: res.data }));
+   }
+
+After:
+   async componentDidMount(){
+      const res = await axios.get('https://jsonplaceholder.typicode.com/users');
+      this.setState({contacts: res.data})
+   }
+
+
+Update Contact.js File for the Delete Function:
+- Where we have an arrow function, we need to place the async keyword before the parameters of the function.
+- We do not need to assign a const variable for the response because we are not getting anything back from the HTTP Delete request as it returns only an empty object. However, we still require the await keyword to wait for the request to complete before we call on our dispatch to DELETE the contact from the DOM.
+
+Before:
+   onDeleteClick = (id, dispatch) => {
+      axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`)
+      .then(res => dispatch({type: 'DELETE_CONTACT', payload: id}))
+   };
+
+After:
+   onDeleteClick = async (id, dispatch) => {
+      const res = await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+      dispatch({type: 'DELETE_CONTACT', payload: id})
+   };
+
+
+Update AddContact.js File for the Add Contact Function:
+- We need to add the Async to the onSubmit function to make it asynchronous. This needs to be placed before the parameters because it is an arrow function.
+- We will need a const res variable to store the response of the PUT request because it returns the newContact as a object.
+- Once we have the response in our const variable, we can then run the dispatch to call on the ADD_CONTACT to update the DOM with the new contact.
+
+Before:
+   axios.post('https://jsonplaceholder.typicode.com/users', newContact)
+   .then(res => dispatch ({type:'ADD_CONTACT', payload: res}));
+
+After:
+   onSubmit = async (dispatch, e) => {
+      ...
+
+      const res = await axios.post('https://jsonplaceholder.typicode.com/users', newContact)
+      dispatch ({type:'ADD_CONTACT', payload: res.data});
+
+      ...
+   }
+
+
+Deleting a newly created Contact Record:
+- One thing we will notice when we create a new contact, we cannot delete it from our application. This is because nothing gets persisted in the jsonplaceholder. The delete button on the new record is giving an 404 error because what we are trying to do is make a DELETE request to the url (https://jsonplaceholder.typicode.com/users/11) - the id 11 was not stored in the jsonplaceholder database, so what it is trying to do is delete something that does not exist. If we had a database then this would have worked.
+- A work around to make the delete button work on our application is to go into our Contact.js file and wrap our async/await in a try/catch. 
+- We will use the try to perform the async/await function to make the DELETE request and if it passes it should run the dispatch. If the DELETE request fails we still want the dispatch to run and therefore will add it to the catch. This will allow us to now delete the new contact record from the DOM even if the DELETE request fails.
+
+Before:
+   onDeleteClick = async (id, dispatch) => {
+      await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+      dispatch({type: 'DELETE_CONTACT', payload: id})
+   };
+
+After:
+   onDeleteClick = async (id, dispatch) => {
+      try{
+         await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+         dispatch({type: 'DELETE_CONTACT', payload: id})
+      }
+      catch(e){
+         dispatch({type: 'DELETE_CONTACT', payload: id})
+      }
+   };
+
+- Note: you would not want to do this in a Live application if you have access to the database. We are only using this workaround to make the front end of this application work.
+- We will still get the 404 error in our console because the URL does not exist in the jsonplaceholder database but we are firing off the dispatch in the catch clause.
