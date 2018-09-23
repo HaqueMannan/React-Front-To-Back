@@ -1,0 +1,65 @@
+----------------------------------------
+DEPLOY TO GITHUB PAGES
+----------------------------------------
+- We are going to deploy our contactmanager to Github.
+- When you have a simple client side application that does not have a backend and database etc. it is pretty easy to deploy it anywhere. 
+- We are going to use Github Pages which is free and gives you HTTPS and it is simple to use.
+- If you have a static html website that doesn't use React, all you have to do is push to a repository with your username and you can simply go to the url e.g. https://username.github.io (you can add a custom domain and dont need to keep it as that). However, with React there are a couple of extra steps required where it is a single page application and need to build it out and so on.
+- We are going to use something called gh-pages which we are going to use nmp to install to assist with our deployment.
+
+Steps:
+1) Create a repository in your github account.
+2) We need a .gitignore file in our root of our project (if we do not have one just simply create the file called .gitignore). Anything put into this file will not be pushed to your repository. We do not want the node_modules because they are all the dependencies.
+
+.gitignore File:
+   node_modules
+
+3) In App.js where we are using react-router-dom, we need to change the BrowserRouter to HashRouter in order for it to work on Github Pages. There are some problems with navigating to different routes if we use BrowserRouter with Github Pages.
+4) We need to create a git folder and add all the files, commit and add it as a remote repository and then finally push to the master branch. We should be able to see all our files in our repository.
+5) We now want to install gh-pages in our repository file. In the Terminal within your repository directory run the following code:
+
+   > npm i gh-pages
+
+6) In our package.json file we should see gh-pages within our file. We need to update this file to define a homepage and add a deploy script:
+
+   {
+      "name": "contactmanager",
+      "version": "0.1.0",
+      "private": true,
+      "homepage": "https://githubusername.github.io/repositoryname"
+      "dependencies": {
+         "axios": "^0.18.0",
+         "bootstrap": "^4.1.3",
+         "classnames": "^2.2.6",
+         "gh-pages": "^1.2.0",
+         "react": "^16.5.0",
+         "react-dom": "^16.5.0",
+         "react-router-dom": "^4.3.1",
+         "react-scripts": "1.1.5",
+         "uuid": "^3.3.2"
+      },
+      "scripts": {
+         "deploy": "npm run build&&gh-pages -d build",
+         "start": "react-scripts start",
+         "build": "react-scripts build",
+         "test": "react-scripts test --env=jsdom",
+         "eject": "react-scripts eject"
+      }
+   }
+
+   Example:
+   "homepage": "https://JohnDoe.github.io/contactmanager"
+
+   Deploy Script:
+   "deploy": "npm run build&&gh-pages -d build",
+   (run npm build and gh-pages build which should deploy your application).
+
+7) In our terminal within your repository directory run the following command:
+
+   npm run deploy
+
+   (This will run our deploy script and build out our assets into a build folder and deploy it to our github url. If it runs successfully it should give the message published).
+
+- You can now go to the url link to view your contactmanager application deployed to github pages in the browser.
+- The difference between BrowserRouter and HashRouter is tht your url will have the /# in the url for any of the file we route to.
+- To add a custom domain, go to your repository settings and scroll down to Github Pages section you can add a custom domain. Click on the Learn more link to see what is required to add a custom domain.
