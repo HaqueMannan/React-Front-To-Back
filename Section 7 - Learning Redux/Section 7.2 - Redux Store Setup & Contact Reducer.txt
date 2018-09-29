@@ -1,0 +1,97 @@
+----------------------------------------
+REDUX STORE SETUP & CONTACT REDUCER
+----------------------------------------
+- There are a lot of boiler plate/setups for Redux (i.e. many ways to setup/structure Redux for your application and no one correct way of doing things).
+- There are a few things you will want to install in your application. Using the terminal within your application directory, type the following codes:
+
+   > nmp i redux react-redux redux-thunk
+
+- We will have something called a Store which will control our application State.
+- The State will be held in the Store and we are going to have Reducers to receive actions which will control what trickles down into our components from the state. 
+
+Store Setup:
+- A lot of developers setup their structure for the store differently and there is no right or wrong way of doing this (based on personal preferences). 
+- You can create a store.js file within the src folder, some developers may prefer to create a store folder and then create like an index file and put in everything in the folder such as their actions etc.
+
+
+store.js File
+- We will create a store.js file within the src folder. In this file we will import from redux:
+
+   import { createStore, applyMiddleware, compose } from "redux";
+   import thunk from 'redux-thunk';
+   import rootReducer from './reducers';
+
+- createStore allows us to create/init a store, applyMiddleware allows us to use the redux-thunk middleware and compose allows us to do more than one thing.
+- We will have a folder called reducers which will have an index.js file which will be our root reducer.
+
+- We can have an initialState for our store (if we want) which will be set as an empty object. We have the initialState as an empty object because when we run the creatStore() method it will take in the initialState as a parameter.
+
+   const initialState = {};
+
+- We can create a variable for our middleware and set it to an array of any middleware we would want to include i.e. thunk:
+
+   const middleware = [thunk];
+
+- We would want to create a store variable and set it to the createStore() method passing in rootReducer and initialState as parameters. 
+- We would also want to pass in our middleware as the third parameter to pass in thunk (i.e. applyMiddleware(thunk)). However, since we are using Redux Devtools we also have to add this along with our middleware as a parameter as well. The compose() allows us to put two things together as one parameter.
+- We need to use the spread operator to include all the array within the middleware variable and add to it the Redux Devtools (https://github.com/zalmoxisus/redux-devtools-extension#usage).
+
+   const store = createStore(rootReducer, initialState, compose(applyMiddleware(...middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
+
+- Finally, we need to export the store.
+
+   export default store;
+
+- This is all we need to do within the store.js file. 
+
+
+App.js File
+We need to go into the App.js file and import the store into our application.
+
+   import { Provider } from 'react-redux';
+   import store from './store';
+
+- The provider acts similar to the Context API. It will provide our entire application with the state/store.
+- Just like the context API, we will want to wrap everything in the <Provider>. The difference between the Context API and Redux is that we actually pass in the Store to the provider.
+
+   <Provider store = { store }>
+      ...
+   </Provider>
+
+
+Reducers folder - index.js File
+- We created the reducers folder within src folder and created an index.js file which will act as our reducer. This will get rid of the application error message from the store.js file which is looking for the reducer folder.
+- The root reducer will be a very small file, which will act as a meeting place for all of our reducers.
+- We will import combineReducers from Redux. We will also import the reducer for contact (which we have not yet created but will be located in the reducers folder). Finally, we will export our reducers using the combineReducers() and adding an object of all our reducers. We will give our reducers a label (in this case Contact will be the label for our contactReducer). This label is important as it will be available in the props and we would make reference to this label to access the state:
+
+   import {combineReducers} from 'redux';
+   import contactReducer from './contactReducer';
+
+
+   export default combineReducers({
+      contact: contactReducer
+   });
+
+
+Reducers folder - contactReducer.js File
+- We will create our contactReducer.js file within the reducer folder. The Application should now start working without any errors and the Redux Devtools should also be working.
+- Each reducer will have its own initial state:
+
+   const initialState = {};
+
+- We will export a default function which takes in the state (which will equal to the initialState) and an action.
+- Just as we did in the Context API, we are going to evaluate the actions by their type e.g. DELETE_CONTACT, ADD_CONTACT etc. using the switch statement to run the block of code based on the action type.
+
+   const initialState = {};
+
+   export default function(state = initialState, action){
+      switch(action.type){
+         default: return state;
+      }
+   }
+
+- Currently, we will add the default which will return the current state.
+
+- If we now run our application there are no longer any errors and the application should be running. We can also go into the Redux Devtools which should now be working with our application. In the State tab we can see the contact (we created the contactReducer.js file but brought it over into our root reducer (index.js) file and labelled the reducer as contact which appears in the Redux Devtools State).
+- The Redux Devtools provides an overall view of your entire application state, whereas React devtools allows you to see the state of the particular components.
+- The Diff tab in the Redux Devtools displays what has changed in the State e.g. when you delete a contact, the Diff tab will show you the details of the contact that was deleted from the State.
