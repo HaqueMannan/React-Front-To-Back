@@ -1,0 +1,115 @@
+----------------------------------------
+CONNECTING COMPONENTS & DISPATCHING ACTIONS
+----------------------------------------
+- We want to move the contacts from the component (Contacts.js) into our reducer (contactReducer.js) initial state. We want to the get the contacts from the root reducer and display them.
+- In our Contact.js file we deleted/removed the state and copied the contacts array. We added the contacts array in the initialState() of our contactReducer.
+
+contactReducer.js File:
+   const initialState = {
+      contacts: [
+         {
+            id: 1,
+            name: 'John Doe',
+            email: 'john@gmail.com',
+            phone: '555-555-5555'
+         },
+         {
+            id: 2,
+            name: 'Karen Williams',
+            email: 'karen@gmail.com',
+            phone: '444-444-4444'
+         },
+         {
+            id: 3,
+            name: 'Henry Johnson',
+            email: 'henry@gmail.com',
+            phone: '333-333-333'
+         }
+      ]
+   };
+
+- Our application will now error because it is still trying to find contacts state which is no longer in our component file.
+- We need to find a way to get the state from the contactReducer into our components. In Redux we need to define something called action types (just like we did in the Context API we had actions such as DELETE_CONTACT, ADD_CONTACT etc.). We do this by defining them as a constant variables in a file.
+- Within our src folder we created a new folder called actions and then created the types.js file which is where we are going to create our Redux actions types. This gives us a central place for all of our types. We will simply create an export const variable of the action type and set it with the same name:
+
+types.js File:
+   export const GET_CONTACTS = 'GET_CONTACTS';
+
+- In our contactReducer we will import our GET_CONTACTS type from our types.js file. In our contactReducer function we will add a case for the GET_CONTACTS action type to return the initialState() using the spread operator (...):
+
+contactReducer.js File:
+   import { GET_CONTACTS } from '../actions/types';
+
+   export default function(state = initialState, action){
+      switch(action.type){
+         case GET_CONTACTS:
+            return{
+               ...state
+            };
+         default: return state;
+      }
+   }
+
+- We now have our reducer and an action type of GET_CONTACTS which just returns the state. We now need to get the state into our Contacts.js component. In order to do this we need to bring in something called connect from react-redux (react-redux takes care of connecting react to redux). 
+- To do this we need to import connect from react-redux into our Contacts.js file. We also need to import PropTypes from prop-types this is because when we have an action it is called in as a prop and when we bring in anything from the Redux state it is also put into Props. Therefore we also want PropTypes:
+
+Contacts.js File:
+   import { connect } from 'react-redux';
+   import PropTypes from 'prop-types';
+
+- In order to use connect, we need to export connect() and pass in two parameters:
+   1) First, anything we want to map from the Redux state to the Props in the component.
+   2) Second, anything we want to dispatch.
+- We would then wrap the component in parentheses to also export the Contacts component.
+
+Contacts.js File:
+   export default connect()(Contacts);
+
+- We would create two variables to pass in as our parameters within the connect(). The first variable will be our mapStateToProps and this will be an arrow function which takes in the state as a parameter and set this to a Prop component called contacts:
+
+   const mapStateToProps = (state) => ({
+      contacts: state.contact.contacts
+   });
+
+Explanation of contacts: state.contact.contacts:
+- Within our state object we have 'contact' which is the label name of our contactReducer within our root reducer file (index.js). If we look at the Redux DevTools within the State tab we have a state called contact.
+- If we expand the 'contact' reducer in the Redux DevTools we can see 'contacts' which holds our contacts array.
+- We are placing the 'state.contact.contacts' within a Prop inside of this component called 'contacts:' and we should be able to access this component by using this.props.contacts. 
+Note: if we called the Prop 'test: state.contact.contacts', we would access the component by calling this.props.test i.e. we will call on the prop component name.
+
+- The second variable will be our mapDispatchToProps which takes in the dispatch as a parameter and set to our action/function - which we also need to import into our component file:
+
+   import { GET_CONTACTS } from '../../actions/types';
+
+   const mapDispatchToProps = (dispatch) => ({
+      getContacts: () => dispatch({ type:'GET_CONTACTS' })
+   })
+
+- We will pass both variable functions into our expot default connect() as both parameters:
+
+   export default connect(mapStateToProps, mapDispatchToProps)(Contacts);
+
+- Finally, we will finish off with our PropTypes for the two variables above:
+
+   Contacts.propTypes = {
+      contacts: PropTypes.array.isRequired,
+      getContacts: PropTypes.func.isRequired
+   };
+
+- Now, we need to call the 'getContacts' within our componentDidMount lifecycle method within our Component, above the render() lifecycle method. When the getContacts() method is called, this will place the contacts array into props:
+
+   componentDidMount(){
+      this.props.getContacts();
+   }
+
+- We now need to update our render() method, which is currently trying to get the contacts from the state which does not exist in the component file anymore. We will change this.state to this.props because we now have access to the prop contacts because of our mapStateToProps function which is pulling the contacts from the state.
+
+Before:
+   render() {
+      const { contacts } = this.state;
+
+After:
+   render() {
+      const { contacts } = this.props;
+
+- The application should now work as it is getting the Contacts from redux. We can see from the Redux DevTools Diff tab that the GET_CONTACTS action type is being called.
