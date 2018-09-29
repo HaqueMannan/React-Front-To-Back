@@ -1,0 +1,15 @@
+----------------------------------------
+A Note On Redux & App Starting Point For Redux
+----------------------------------------
+- Redux is a State Manager and gives us the ability to have application level State.
+- The Context API demonstrated how useful it is to have all your State in one place and to be able to access it through all of your components.
+- The Context API is great for smaller applications where you do not have too many resources (e.g. the contactmanager app we built which only has a contact resource).
+- Redux was created for managing a larger application State for example an e-commerce website which has products, categories, customers, authentication etc.
+- Redux consists of a:
+   1) Store - holds the applications global state.
+   2) Reducers - functions that manipulate the state.
+   3) Actions - makes calls to the Reducer.
+
+https://redux.js.org/
+
+- We will be using the previous contactmanager app as a base but have stripped out all the Context API code as we will be using Redux.
