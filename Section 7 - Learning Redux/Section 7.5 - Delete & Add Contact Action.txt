@@ -1,0 +1,134 @@
+----------------------------------------
+DELETE & ADD CONTACT ACTIONS
+----------------------------------------
+- We are now going to create the Delete and Add contact actions in our application.
+
+actions/types.js File:
+- For each action type we need to create an export const variable within our types.js file.
+
+   export const GET_CONTACTS = 'GET_CONTACTS';
+   export const DELETE_CONTACT = 'DELETE_CONTACT';
+   export const ADD_CONTACT = 'ADD_CONTACT';
+
+
+actions/contactAction.js File:
+- We need to import each of the new actions from the type.js file and then create an export const function which will return the action type:
+- The delete action will take in an 'id' as a parameter for the function and set the id to a payload so that we know which contact to delete using the id as reference.
+- The add action will take in the entire 'contact' as a parameter for the function and set the contact as the payload to create the new contact to appear in our list of contacts.
+
+   import { GET_CONTACTS, DELETE_CONTACT, ADD_CONTACT } from '../actions/types';
+
+   export const getContacts = () => {
+      return {
+         type: GET_CONTACTS
+      };
+   };
+
+   export const deleteContact = (id) => {
+      return {
+         type: DELETE_CONTACT,
+         payload: id
+      };
+   };
+
+   export const addContact = (contact) => {
+      return {
+         type: ADD_CONTACT,
+         payload: contact
+      };
+   };
+
+
+reducers/contactReducer.js File:
+- We now need to implement the actions in the reducer files. First we need to import the action types into our reducer files. Then we would need to add the action types in our switch statement for each new action type.
+- The DELETE_CONTACT will want to take the original state using the spread operator but filter out the contact using the payload.
+- The ADD_CONTACT will want to take the original state using the spread operator but add to the contact using the payload.
+
+   import { GET_CONTACTS, DELETE_CONTACT, ADD_CONTACT } from '../actions/types';
+
+   ...
+
+   export default function(state = initialState, action){
+      switch(action.type){
+         case GET_CONTACTS:
+            return{
+               ...state
+            };
+         case DELETE_CONTACT:
+            return{
+               ...state,
+               contacts: state.contacts.filter(contact => contact.id !== action.payload)
+            };
+         case ADD_CONTACT:
+            return{
+               ...state,
+               contacts: [action.payload, ...state.contacts]
+            };
+         default: return state;
+      }
+   }
+
+
+- We now need to call the action types from somewhere within our application i.e. we need to update the relevant components files to implement the action (i.e. Contact.js file to call on the DELETE_CONTACT action type on the onDeleteClick() function).
+
+
+src/components/contact/Contact.js File:
+- We need to import the {connect} from react-redux into our file as well as the deleteContact action types from contactActions.
+
+   import { connect } from 'react-redux';
+   import { deleteContact } from '../../actions/contactActions';
+
+- In our export, we are going to export our connect() and wrap our component in parentheses.
+- The first parameter for our connect is null because we are not getting any data (we are not mapping state to prop), all we are doing is calling an action. The second parameter will be an object where we want to wrap in curly braces our action we want to call which we brought in from our import of the contactActions.
+- We would want to then update our PropTypes to add our deleteContact as a func PropTypes and isRequired.
+
+   Contact.propTypes = {
+      contact: PropTypes.object.isRequired,
+      deleteContact: PropTypes.func.isRequired
+   };
+
+   export default connect(null, {deleteContact})(Contact);
+
+- We want to call the deleteContact on our onDeleteClick() event function.
+
+   onDeleteClick = id => {
+      this.props.deleteContact(id)
+   };
+
+- Our delete buttons should now work with our application and remove the contact from the Redux Store/State.
+
+
+src/components/contact/AddContact.js File:
+- We need to import PropTypes, Connect and the addContact action into our AddContact component file.
+
+   import PropTypes from 'prop-types';
+   import { connect } from 'react-redux';
+   import { addContact } from '../../actions/contactActions';
+
+- We need to go to the bottom of our file to add in our PropTypes and export default in order to work with Redux DevTools.
+- We are not bringing any data in from the state therefore the first parameter for connect() will be null. We do have an action so the second parameter will be the {addContact} action which we imported.
+- We want to add a PropTypes to our AddContact component, which the addContact action is a required function.
+
+   AddContact.propTypes = {
+      addContact: PropTypes.func.isRequired
+   };
+
+   export default connect(null, {addContact})(AddContact);
+
+- We now need to call our action type in our onSubmit() event function.
+- Note: we do not have jsonplaceholder setup to generate our id automatically in the backend for us, so in the meantime so we will need to generate our own. For now we will bring/import in uuid and add it to our newContact object.
+
+   import uuid from 'uuid';
+
+   onSubmit = (e) => {
+      ...
+      const newContact = {
+         id: uuid(),
+         name,
+         email,
+         phone
+      };
+
+      this.props.addContact(newContact)
+
+- Our action types (GET_CONTACTS, DELETE_CONTACT and ADD_CONTACT) should all now work with Redux. The application so far is all DOM based. In Section 8 we will be looking at Redux Thunk & HTTP request and start using the jsonplaceholder again in our application.
