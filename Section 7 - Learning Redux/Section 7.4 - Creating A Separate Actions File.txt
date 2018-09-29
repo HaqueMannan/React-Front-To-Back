@@ -1,0 +1,34 @@
+----------------------------------------
+CREATING A SEPARATE ACTIONS FILE
+----------------------------------------
+- We want to create an actions file for each reducer i.e. we have a contactReducer in our reducer folder, we want a contactActions file located in the actions folder.
+
+
+components/contacts/Contacts.js File:
+- We are going to move the code from the Contacts.js file into our contactActions file:
+
+   import { GET_CONTACTS } from '../../actions/types';
+
+   const mapDispatchToProps = (dispatch) => ({
+      getContacts: () => dispatch({ type: GET_CONTACTS })
+   })
+
+actions/contactActions.js File:
+- import the GET_CONTACTS action from the types.js file.
+
+   import { GET_CONTACTS } from './types';
+
+   export const getContacts = () => {
+      return {
+         type: GET_CONTACTS
+      };
+   };
+
+components/contacts/Contacts.js File:
+- We will update our Contacts.js file to import the { getContacts } from our contactActions.
+- We no longer need the mapDispatchToProps variable and can get rid of it. But we will update our export default connect() second parameter by passing in an object with the action/function:
+
+   import { getContacts } from '../../actions/contactActions';
+   export default connect(mapStateToProps, {getContacts})(Contacts);
+
+- We can still access the props by using this.props.getContacts and the application should continue to work as normal. We have now created a separate actions file which we can call within our components file rather than using the mapDispatchToProps function variable.
