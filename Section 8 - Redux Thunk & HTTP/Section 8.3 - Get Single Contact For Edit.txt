@@ -1,0 +1,93 @@
+----------------------------------------
+GET SINGLE CONTACT FOR EDIT
+----------------------------------------
+- When we click on the edit icon to edit a contact the application will take the user to the edit screen, however, there is no details populated into the form for the contact selected for editing.
+- We are going to create a new action type called getContact. We are also going to have an action type called updateContact for when we actually submit the form.
+
+
+src/actions/types.js File:
+- We going to add our two new action types.
+
+   export const GET_CONTACT = 'GET_CONTACT';
+   export const UPDATE_CONTACT = 'UPDATE_CONTACT';
+
+src/actions/contactActions.js File:
+- We need to bring in GET_CONTACT and UPDATE_CONTACT into our file.
+- We want to create our getContact action to fetch the selected single contact data to populate the edit contact form. The code will be similar to the getContacts function but will require the id to be passed in as a parameter so that we can add the id into the url for the GET request which will return a single contact res.data response for the payload.
+
+   import { GET_CONTACTS, GET_CONTACT, DELETE_CONTACT, ADD_CONTACT, UPDATE_CONTACT } from './types';
+
+   export const getContact = (id) => async dispatch => {
+      const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
+      dispatch ({
+         type: GET_CONTACT,
+         payload: res.data
+      });
+   };
+
+src/reducers/contactReducer.js File:
+- We need to import GET_CONTACT and UPDATE_CONTACT into our file.
+- We then need to add the case for the getContact in our switch statement for the GET_CONTACT action type.
+- We will add 'contact' within our initialState as an empty object. This will be the state that represents our current contact that is being viewed. Note: if we had a details page for an individual contact, we would populate it with the contact state. But at the moment we have an edit page which requires the current contact details.
+
+   import { GET_CONTACTS, GET_CONTACT, DELETE_CONTACT, ADD_CONTACT, UPDATE_CONTACT } from '../actions/types';
+
+   const initialState = {
+      contacts: [],
+      contact: {}
+   };
+   export default function(state = initialState, action){
+   switch(action.type){
+      ...
+      case GET_CONTACT:
+         return{
+            ...state,
+            contact: action.payload
+         }
+
+- The contact:{} will be filled by the action.payload response we get from our actions HTTP GET request for the single contact details.
+
+
+src/components/contacts/EditContact.js File:
+- We need to update the EditContact component file so that it will call the GET_CONTACT action to get the single contact details and fill our Edit Form.
+- We need to import connect from react-redux, PropTypes from prop-types and getContact from contactActions.
+
+   import { connect } from 'react-redux';
+   import PropTypes from 'prop-types';
+   import { getContact } from '../../actions/contactActions';
+
+- We need to  map our state to the props. In our contact state we have two objects contacts and contact. We want to take whatever is in the contact (singular) and map/assign the state to our prop which we have called contact.
+- We need to export default our connect() and pass in our 2 parameter and also wrap our component in parentheses.
+- We also need to set our PropTypes for our EditContact.
+
+
+   EditContact.propTypes = {
+      contact: PropTypes.object.isRequired,
+      getContact: PropTypes.func.isRequired
+   }
+
+   const mapStateToProps = state => ({
+      contact: state.contact.contact
+   });
+
+   export default connect(mapStateToProps, {getContact})(EditContact);
+
+- We now need to call getContact in the componentDidMount lifecycle method.
+
+   componentDidMount() {
+      const {id} = this.props.match.params;
+      this.props.getContact(id);
+   }
+
+- In order to get the contact details into our edit form fields, we want to take the props from the getContact and set them to the state. However, we want to keep this a controlled component so that we have the user inputs bound to the state. We will use the componentWillReceiveProps() lifecycle method for this.
+- componentWillReceiveProps() takes in 2 parameters nextProps and nextState.
+- When we fetch our data/contact from the state and we bring it in as a prop/map it to a prop, the lifecycle method componentWillReceiveProps will run and then we can access the contact prop inside the nextProps object. We will pull our the name, email and phone from nextProps.connect and set it to the state.
+
+   componentWillReceiveProps(nextProps, nextState) {
+      const { name, phone, email } = nextProps.contact;
+      this.setState({
+         name,
+         email, 
+         phone
+      })
+   }
