@@ -1,0 +1,108 @@
+----------------------------------------
+POST & DELETE REQUEST DISPATCH
+----------------------------------------
+- We now want to create our HTTP request for our DELETE and ADD Contacts actions as we did for the GET HTTP request. We are no longer building a DOM based application, we are using jsonplaceholder as our backend.
+
+
+DELETE REQUEST:
+src/actions/contactActions.js File:
+- We want to use async/await dispatch on our deleteContact function.
+- The DELETE request does not require a response data so we do not need to create a res variable to store the res.data response.
+
+Before:
+   export const deleteContact = (id) => {
+      return {
+         type: DELETE_CONTACT,
+         payload: id
+      };
+   };
+
+After:
+export const deleteContact = (id) => async dispatch => {
+   await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`)
+   dispatch ({
+      type: DELETE_CONTACT,
+      payload: id
+   });
+};
+
+
+src/actions/contactActions.js File:
+- Our contactReducer for the DELETE_CONTACT case will remain the same we want to delete the contact from the state using the filter.
+
+   case DELETE_CONTACT:
+      return {
+        ...state,
+        contacts: state.contacts.filter(
+          contact => contact.id !== action.payload
+        )
+      };
+
+- Our DELETE_CONTACT action should now be working and when we look at the Redux DevTool, the DELETE_CONTACT is called when we click on the X icon and this will change the state of our application. If we look at the Network tab we should see the DELETE HTTP request to jsonplaceholder which returns an empty object.
+
+
+
+POST REQUEST:
+src/actions/contactActions.js File:
+- We want to use async/await dispatch on our addContact function.
+- For the POST request we want to store the response and so will create a const res variable so that our payload will return the res.data response into our components to update the list of contacts with the new contact created.
+- We no longer require and id from uuid because jsonplaceholder provides us with a generated id from the response.
+
+Before:
+   export const addContact = (contact) => {
+      return {
+         type: ADD_CONTACT,
+         payload: contact
+      };
+   };
+
+After:
+   export const addContact = (contact) => async dispatch => {
+      const res = await axios.post('https://jsonplaceholder.typicode.com/users/', contact)
+      dispatch ({
+         type: ADD_CONTACT,
+         payload: res.data
+      });
+   };
+
+src/components/contacts/AddContacts.js File:
+- Updated the onSubmit() function to remove uuid as we no longer required to generate our own id as this is provided from the jsonplaceholder res.data response.
+
+Removed:
+   import uuid from 'uuid';
+
+Updated From:                       Updated To:
+   const newContact = {             const newContact = {
+      id: uuid(),                      name,
+      name,                            email,
+      email,                           phone
+      phone                         };
+   };
+
+src/actions/contactActions.js File:
+- Our contactReducer for the ADD_CONTACT case will remain the same we want to add the new contact payload to the current state.
+
+   case ADD_CONTACT:
+      return{
+         ...state,
+         contacts: [action.payload, ...state.contacts]
+      };
+
+- Our ADD_CONTACT action should now be working and we are able to create a new contact that is added to our contact list. However, we cannot delete the new contact because the new contact is not actually being stored in the jsonplaceholder server. In a live application you would have your own server and database.
+- We can add the try/catch in our DELETE_CONTACT to make the application work as it suppose to. We can try the DELETE request and in the catch where we get a DELETE 404 error request we can still call the dispatch to run. We do not need to do this if we had our own API/backend.
+
+Updated:
+   export const deleteContact = (id) => async dispatch => {
+      try{
+         await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`)
+         dispatch ({
+            type: DELETE_CONTACT,
+            payload: id
+         });
+      } catch(e){
+         dispatch ({
+            type: DELETE_CONTACT,
+            payload: id
+         });
+      }
+   };
