@@ -1,0 +1,99 @@
+----------------------------------------
+GET REQUEST DISPATCH
+----------------------------------------
+- Up until this point we have been taking our contacts from the initialState inside of the contactReducer.
+- We now want to pull our contacts from jsonplaceholder, as we did before with our first contactmanager application using the Context API.
+- We are going to simulate grabbing data from a API using HTTP requests to populate our initialState.
+
+
+src/reducers/contactReducer.js File:
+- We removed the contact array from the initialState:
+
+Before:
+   const initialState = {
+      contacts: [
+         {
+            id: 1,
+            name: 'John Doe',
+            email: 'john@gmail.com',
+            phone: '555-555-5555'
+         },
+         {
+            id: 2,
+            name: 'Karen Williams',
+            email: 'karen@gmail.com',
+            phone: '444-444-4444'
+         },
+         {
+            id: 3,
+            name: 'Henry Johnson',
+            email: 'henry@gmail.com',
+            phone: '333-333-333'
+         }
+      ]
+   };
+
+After:
+   const initialState = {
+      contacts:[]
+   };
+
+
+src/actions/contactActions.js File:
+- This is the file we want to make our HTTP requests.
+- To add the GET request, we are going to add the dispatch to our getContacts so that we can directly call dispatch. This is where Redux Thunk comes in, which allows us to do this.
+- Instead of calling return we want to call dispatch and wrap the block code in parentheses.
+
+Before:
+   export const getContacts = () => {
+      return {
+         type: GET_CONTACTS
+      };
+   };
+
+After:
+   export const getContacts = () => dispatch => {
+      dispatch ({
+         type: GET_CONTACTS
+      });
+   };
+
+- Above our dispatch we want to make the call to jsonplaceholder. We want to get the response and then add that as a payload to GET_CONTACTS.
+- We are going to use async/await. We want to put the async keyword before the dispatch and below create a variable called res which will have the await keyword.
+- We are using axios and therefore will need to bring this into our file by importing axios from axios.
+- In the res variable we will access to the response data using res.data - we can use a payload in our dispatch to pass the data from the GET request.
+
+   import axios from 'axios';
+
+   export const getContacts = () => async dispatch => {
+      const res = await axios.get('https://jsonplaceholder.typicode.com/users');
+      dispatch ({
+         type: GET_CONTACTS,
+         payload: res.data
+      });
+   };
+
+
+src/reducers/contactReducer.js File:
+- Update the contactReducer switch statement for the GET_CONTACTS case so that instead of returning the initialState, we want to return adding to the initialState the getContacts payload.
+
+Before:
+   export default function(state = initialState, action){
+      switch(action.type){
+         case GET_CONTACTS:
+            return{
+               ...state,
+            };
+
+After:
+   export default function(state = initialState, action){
+      switch(action.type){
+         case GET_CONTACTS:
+            return{
+               ...state,
+               contacts: action.payload
+            };
+
+
+- This will now GET the user data from jsonplaceholder and then put them in as our contacts within our Contact List. If we open up our Redux DevTools we can see GET_CONTACTS is being called on componentDidMount lifecycle method which has all the payload for the contacts from jsonplaceholder which are all in our state.
+- Every request we make is going to be from the actions.
