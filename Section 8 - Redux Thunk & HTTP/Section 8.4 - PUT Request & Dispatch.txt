@@ -1,0 +1,61 @@
+----------------------------------------
+PUT REQUEST & DISPATCH
+----------------------------------------
+- We will now create the PUT request to update contact details. This will complete our CRUD application.
+
+
+src/actions/contactActions.js File:
+- We have already imported the UPDATE_CONTACT action from the types.js file. We now need to add the function.
+- We want to call on the put request which takes in the url and the new updated contact as parameters. We want the dispatch type of UPDATE_CONTACT and a payload of the new updated contact data.
+
+   import { GET_CONTACTS, GET_CONTACT, DELETE_CONTACT, ADD_CONTACT, UPDATE_CONTACT } from './types';
+
+   export const updateContact = (contact) => async dispatch => {
+      const res = await axios.put(`https://jsonplaceholder.typicode.com/users/${contact.id}`, contact)
+      dispatch ({
+         type: UPDATE_CONTACT,
+         payload: res.data
+      });
+   };
+
+
+src/reducers/contactReducer.js File:
+- We want to add a case for the UPDATE_CONTACT within our switch. We already imported the UPDATE_CONTACT into our file. We are going to use map() to loop through our contacts and add the new contact to our existing state if the condition is true i.e. the contact id is the same as the payload contact id.
+
+   import { GET_CONTACTS, GET_CONTACT, DELETE_CONTACT, ADD_CONTACT, UPDATE_CONTACT } from '../actions/types';
+
+   case UPDATE_CONTACT:
+      return{
+         ...state,
+         contacts: state.contacts.map(contact => contact.id === action.payload.id 
+            ? (contact = action.payload) 
+            : contact
+         )
+      }
+
+
+src/components/contacts/EditContact.js File:
+- We now need to implement the UPDATE_CONTACT action in our EditContact component file. We need to first bring in the action, update the export connect() to add the action as the second parameter and then call on the function in the onSubmit(e) event function.
+- We want to add the id in our updContact variable.
+
+   import { getContact, updateContact } from '../../actions/contactActions';
+
+   onSubmit = (e) => {
+      ...
+
+      const updContact = {
+         id,
+         name,
+         email,
+         phone
+      };
+
+      this.props.updateContact(updContact);
+
+      ...
+   }
+
+   export default connect(mapStateToProps, {getContact, updateContact})(EditContact);
+
+
+- We should now be able to update contact details using the Edit form. This completes our CRUD application using Redux as our State Manager.
