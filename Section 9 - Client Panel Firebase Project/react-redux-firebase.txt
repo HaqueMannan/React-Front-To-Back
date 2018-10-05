@@ -1,0 +1,21 @@
+-----------------------------------
+React-Redux-Firebase Setup
+-----------------------------------
+
+Github Guide Page:
+https://github.com/prescottprue/react-redux-firebase
+
+In terminal within your project directory run the following command:
+   > npm i redux react-redux react-redux-firebase redux-firestore firebase
+
+These are the dependencies that we require for now in our application.
+
+1) Redux for our Store/State Management
+2) React-Redux which combines React with redux
+3) React-Redux-Firebase which integrates with firebase and allows us to access our collections, auth etc.
+4) Redux-Firestore which deals with the firestore database.
+5) Firebase library itself.
+
+These dependencies will be added to the package.json file as well as installed in the node_modules folder.
+In the src folder we will create the store.js file which will hold the application intialState and store.
+There will be a lot of boilerplate setup code but this will allow us with functionlity for our Web App.
