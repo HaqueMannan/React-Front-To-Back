@@ -25,6 +25,7 @@ class Clients extends Component {
       return null;
    }
 
+
    render() {
       const { clients } = this.props;
       const { totalOwed } = this.state;
