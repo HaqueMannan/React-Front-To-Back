@@ -23,7 +23,7 @@ class ClientDetails extends Component {
 
       const clientUpdate = {
          balance: parseFloat(balanceUpdateAmount)
-      }
+      };
 
       const hideUpdateForm = (e) => {this.setState({ showBalanceUpdate: false, balanceUpdateAmount: '' })};
 
@@ -31,7 +31,7 @@ class ClientDetails extends Component {
       firestore.update({ collection: 'clients', doc: client.id }, clientUpdate);
 
       //Hide balanceForm and clear balanceUpdateAmount after update in firestore
-      hideUpdateForm()
+      hideUpdateForm();
    };
 
    //Delete client
@@ -138,7 +138,6 @@ ClientDetails.propTypes = {
    firestore: PropTypes.object.isRequired
 };
 
-// export default TestComp;
 export default compose(
    firestoreConnect(props => [{ collection: 'clients', storeAs: 'client', doc: props.match.params.id }]),
    connect(({ firestore: { ordered } }, props) => ({
