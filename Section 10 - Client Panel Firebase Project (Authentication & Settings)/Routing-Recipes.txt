@@ -1,0 +1,49 @@
+-------------------------------------
+REACT-REDUX-FIREBASE ROUTING RECIPES
+-------------------------------------
+- Unlike Angula (which is a framework), React does not have Routing Protection. 
+- React requires to you to do everything on your own or find a separate package to help you.
+- In the React-Redux-Firebase there is something called Routing Recipes and it is within their documentation:
+https://github.com/prescottprue/react-redux-firebase/blob/master/docs/recipes/routing.md
+
+- Routing Recipes allows you to add routing protection and there are various methods available.
+- You can protect a certain page/component by:
+   > the Component, or
+   > the Router
+
+- In our clientpanel_react project we will protect our pages using the Router method.
+- In our terminal within our project directory we will run the following command to install redux-auth-wrapper in our project:
+
+   npm i redux-auth-wrapper
+
+- We would create a folder called helpers (or anything you want) and create a file called auth.js (again you can call this anything you want). This is going to be our authentication helper file.
+- In the documentation page we are going to grab the code from react-router v4 + redux-auth-wrapper v2 (check in your package.json file to see which version you are using of redux-auth-wrapper i.e. "redux-auth-wrapper": "^2.0.3") and paste the code into this file.
+
+- Update the LoadingScreen from path to your loader component i.e. spinner
+
+Before:
+   import LoadingScreen from '../components/LoadingScreen'; // change it to your custom component
+After:
+   import LoadingScreen from '../components/layout/Spinner';
+
+- Finally, get rid of the following code from the UserIsAuthenticated and UserIsNotAuthenticated export default function. This is because we are not dispatching and do not have UNAUTHED_REDIRECT in our state.
+
+   redirectAction: newLoc => (dispatch) => {
+      browserHistory.replace(newLoc); // or routerActions.replace
+      dispatch({ type: 'UNAUTHED_REDIRECT' });
+   }
+
+- We can now import the functions into our App.js file and implement them into our Routes:
+
+   import { UserIsAuthenticated, UserIsAuthenticated } from './helpers/auth'; 
+
+- To implement the authentication on our Routes is to wrap our routes for example:
+
+Before:
+   <Route exact path="/Login" component={ Login } />
+   <Route exact path="/" component={ Dashboard } />
+After:
+   <Route exact path="/Login" component={ UserIsNotAuthenticated(Login) } />
+   <Route exact path="/" component={ UserIsAuthenticated(Dashboard) } />
+
+- We have now implemented Route Protection in our application.
