@@ -4,7 +4,7 @@ import 'firebase/firestore';
 import { reactReduxFirebase, firebaseReducer } from 'react-redux-firebase';
 import { reduxFirestore, firestoreReducer } from 'redux-firestore';
 //Custom Reducers:
-// @todo
+import notifyReducer from './reducers/notifyReducer';
 
 
 //Add Firebase to WebApp
@@ -39,7 +39,8 @@ const createStoreWithFirebase = compose(
 // Add firebase to reducers
 const rootReducer = combineReducers({
    firebase: firebaseReducer,
-   firestore: firestoreReducer
+   firestore: firestoreReducer,
+   notify: notifyReducer
 });
 
 // Create initial state
