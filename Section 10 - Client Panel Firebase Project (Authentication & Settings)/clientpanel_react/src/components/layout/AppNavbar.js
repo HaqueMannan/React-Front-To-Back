@@ -54,6 +54,9 @@ class AppNavbar extends Component {
                            </a>
                         </li>
                         <li className="nav-item">
+                           <Link to="/settings" className="nav-link">Settings</Link>
+                        </li>
+                        <li className="nav-item">
                            <a href="#!" className="nav-link" onClick={this.onLogoutClick}>
                               Logout
                            </a>
