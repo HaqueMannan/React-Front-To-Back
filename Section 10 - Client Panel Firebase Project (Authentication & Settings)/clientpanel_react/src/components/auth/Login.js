@@ -7,9 +7,9 @@ import { firebaseConnect } from 'react-redux-firebase';
 
 class Login extends Component {
    state = {
-       email: '',
-       password: ''
-   }
+      email: '',
+      password: ''
+   };
 
    onSubmit = (e) => {
       e.preventDefault();
