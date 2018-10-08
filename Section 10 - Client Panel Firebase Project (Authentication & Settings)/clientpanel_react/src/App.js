@@ -12,6 +12,7 @@ import AddClient from './components/clients/AddClient';
 import EditClient from './components/clients/EditClient';
 import ClientDetails from './components/clients/ClientDetails';
 import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 import Settings from './components/settings/Settings';
 
 
@@ -24,7 +25,8 @@ class App extends Component {
                   <AppNavbar />
                   <div className="container">
                      <Switch>
-                        <Route exact path="/Login" component={ UserIsNotAuthenticated(Login) } />
+                        <Route exact path="/login" component={ UserIsNotAuthenticated(Login) } />
+                        <Route exact path="/register" component={ UserIsNotAuthenticated(Register) } />
                         <Route exact path="/settings" component={ UserIsAuthenticated(Settings) } />
                         <Route exact path="/" component={ UserIsAuthenticated(Dashboard) } />
                         <Route exact path="/client/add" component={ UserIsAuthenticated(AddClient) } />
